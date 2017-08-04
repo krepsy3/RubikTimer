@@ -15,3 +15,6 @@ C:\Users\Kryštof\Documents\Dokumenty\Programy\RubikTimer\RubikTimer\obj\Debug\R
 C:\Users\Jirik\Documents\Visual Studio 2015\Projects\RubikTimer\RubikTimer\bin\Debug\RubikTimer.exe.config
 C:\Users\Jirik\Documents\Visual Studio 2015\Projects\RubikTimer\RubikTimer\obj\Debug\RubikTimer.exe
 C:\Users\Jirik\Documents\Visual Studio 2015\Projects\RubikTimer\RubikTimer\obj\Debug\RubikTimer.pdb
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\bin\Debug\RubikTimer.exe.config
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.exe
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.pdb
