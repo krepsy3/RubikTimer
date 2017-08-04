@@ -10,6 +10,7 @@ namespace RubikTimer
     {
         public static string[] Type = { "Other", "2x2x2 Cube", "3x3x3 Cube", "Square-1", "Pyraminx" };
         private Random random;
+        // test 2
 
         public ScrambleGenerator()
         {
