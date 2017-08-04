@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using RUbil;
+
 namespace RubikStatEditor
 {
     /// <summary>
@@ -20,9 +22,19 @@ namespace RubikStatEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        
+
         public MainWindow()
         {
             InitializeComponent();
+            /*textBlock.Text += App.args.Length + "\n";
+
+            foreach (string str in App.args)
+            {
+                textBlock.Text += str + "\n";
+            }*/
+
+            
         }
     }
 }
