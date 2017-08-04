@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,19 +24,26 @@ namespace RubikStatEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        private ObservableCollection<FileItem> fileItems;
 
         public MainWindow()
         {
             InitializeComponent();
-            /*textBlock.Text += App.args.Length + "\n";
 
-            foreach (string str in App.args)
+            FileReader fileReader = new FileReader();
+
+            try
             {
-                textBlock.Text += str + "\n";
-            }*/
-
-            
+                fileItems = new ObservableCollection<FileItem>(fileReader.LoadFileItemsFromFile(App.args[0]));
+            }
+            catch (Exception e) when (e is ArgumentException || e is ArgumentNullException || e is DirectoryNotFoundException || e is FileNotFoundException || e is PathTooLongException)
+            {
+                MessageBox.Show("Invalid file path.");
+            }
+            catch
+            {
+                MessageBox.Show("Can not open the file.");
+            }
         }
     }
 }

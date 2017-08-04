@@ -18,6 +18,18 @@ namespace RubikStatEditor
         private void App_Startup(object sender, StartupEventArgs e)
         {
             args = e.Args;
+
+            if (e.Args.Length == 0)
+            {
+                // opening RubikStatEditor.exe not .stxt file
+                MessageBox.Show("If you want to edit statistics open Rubik time and...."); // NEDODELANO
+                Shutdown();
+            }
+            else
+            {
+                Window win = new MainWindow();
+                win.Show();
+            }
         }
     }
 }

@@ -10,9 +10,13 @@ namespace RUbil
 {
     class FileReader
     {
-        public static List<Statistic> LoadStatisticFromFile(string path)
+        public List<FileItem> LoadFileItemsFromFile(string path)
         {
-            return new List<Statistic>();
+            List<FileItem> statistics = new List<FileItem>();
+
+
+
+            return statistics;
         }
     }
 }
