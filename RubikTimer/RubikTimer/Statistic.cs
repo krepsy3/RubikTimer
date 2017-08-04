@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RubikTimer
 {
-    class Statistic : IComparable, INotifyPropertyChanged
+    public class Statistic : IComparable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private void UpdateProperty(string propertyname) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname)); }
