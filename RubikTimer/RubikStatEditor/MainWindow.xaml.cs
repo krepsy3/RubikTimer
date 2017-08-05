@@ -46,10 +46,19 @@ namespace RubikStatEditor
             dataGrid.ItemsSource = fileItems;
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void ConvertToStatistic(object sender, RoutedEventArgs e)
         {
-            //fileItems.Add(new FileItem(new RubikTimer.Statistic(TimeSpan.FromSeconds(10), "info"), "Comment", "Line text"));
-            fileItems.ElementAt(1).SolveTime = "";
+            if (dataGrid.SelectedIndex == -1) // nothing is selected
+                return;
+
+            FileItem item = (FileItem)dataGrid.SelectedItem;
+
+            // DODELAT; tady musi byt nejaka podminka na convertovani do Statistic; pokud bude Statistic null, musi se vytvorit NOVA INSTANCE,
+            //   a taky pokud nebude zadna vlastnost z FileItem urcena, musi se urcit.
+            // Na toto by asi bylo nejlepsi male okenko, kde by si to uzivatel zvolil; nebo taky ne => vsechen text by se ulozil do Comment a Info
+            //   s SolveTime by zustalo prazdne
+
+            item.LineContent = "Statistic";
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

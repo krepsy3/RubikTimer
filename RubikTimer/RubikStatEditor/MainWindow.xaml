@@ -47,10 +47,9 @@
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <Button Content="Change to Statistic" HorizontalAlignment="Left" Width="Auto" Visibility="{Binding Path=ChangeToStatOpt, Converter={StaticResource BoolToVisConverter} }" Padding="3" Margin="5,0,0,0"/>
+                    <Button Content="Convert to Statistic" HorizontalAlignment="Left" Width="Auto" Visibility="{Binding Path=ChangeToStatOpt, Converter={StaticResource BoolToVisConverter} }" Padding="3" Margin="5,0,0,0" Click="ConvertToStatistic"/>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Margin="432,10,0,0" Click="button_Click"/>
     </Grid>
 </Window>

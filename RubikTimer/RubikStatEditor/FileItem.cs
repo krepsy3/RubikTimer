@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,13 +10,15 @@ using RubikTimer;
 
 namespace RubikStatEditor
 {
-    public class FileItem
+    public class FileItem : INotifyPropertyChanged
     {
         private Statistic statistic;
 
-        private string lineText;
+        private string _lineText;
         private string _solveTime;
-        private string _info;
+        private string _comment;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public bool IsStatistic { get; private set; }
 
@@ -23,7 +26,7 @@ namespace RubikStatEditor
         {
             get
             {
-                return (IsStatistic) ? "Statistic" : lineText;
+                return (IsStatistic) ? "Statistic" : _lineText;
             }
             set
             {
@@ -31,11 +34,18 @@ namespace RubikStatEditor
                 {
                     if (IsStatistic)
                     {
-                        lineText += value;
+                        _lineText += value;
                         IsStatistic = false;
+                        UpdateAllProperties();
                     }
                     else
-                        lineText = value;
+                        _lineText = value;
+                }
+                else if (value == "Statistic")
+                {
+                    // converting to Statistic
+                    IsStatistic = true;
+                    UpdateAllProperties();
                 }
             }
         }
@@ -44,11 +54,16 @@ namespace RubikStatEditor
         {
             get
             {
-                return (IsStatistic) ? statistic.SolveTime.ToString() : _solveTime;
+                return (IsStatistic) ? statistic.SolveTime.Ticks.ToString() : "";
             }
             set
             {
-                _solveTime = value;
+                if (IsStatistic)
+                {
+                    long ticks = 0;
+                    long.TryParse(value, out ticks);
+                    statistic.SolveTime = TimeSpan.FromTicks(ticks);
+                }
             }
         }
 
@@ -56,17 +71,35 @@ namespace RubikStatEditor
         {
             get
             {
-                return (IsStatistic) ? statistic.Info : _info;
+                return (IsStatistic) ? statistic.Info : "";
             }
             set
             {
-                _info = value;
+                if (IsStatistic)
+                    statistic.Info = value;
             }
         }
 
-        public string Comment { get; set; }
+        public string Comment
+        {
+            get
+            {
+                return (IsStatistic) ? _comment : "";
+            }
+            set
+            {
+                if (IsStatistic)
+                    _comment = value;
+            }
+        }
 
-        public bool ChangeToStatOpt { get; private set; }
+        public bool ChangeToStatOpt
+        {
+            get
+            {
+                return !IsStatistic;
+            }
+        }
 
         public FileItem(Statistic statistic, string comment, string lineText)
         {
@@ -75,12 +108,18 @@ namespace RubikStatEditor
                 IsStatistic = true;
                 this.statistic = statistic;
                 Comment = comment;
-                ChangeToStatOpt = false;
             }
-            else
-                ChangeToStatOpt = true;
 
-            this.lineText = lineText;
+            this._lineText = lineText;
+        }
+
+        private void UpdateAllProperties()
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(String.Empty));
+                // String.Empty is doing the trick with updating all properties
+            }
         }
     }
 }
