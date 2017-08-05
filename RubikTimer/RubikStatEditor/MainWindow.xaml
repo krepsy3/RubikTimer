@@ -9,10 +9,37 @@
     <Grid>
         <DataGrid x:Name="dataGrid" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents"/>
-                <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time"/>
-                <DataGridTextColumn Binding="{Binding Path=Info}" Header="Statistic info"/>
-                <DataGridTextColumn Binding="{Binding Path=Comment}" Header="Comment" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents" MinWidth="200">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time" MinWidth="200">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=Info}" Header="Info" MinWidth="200">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding Path=Comment}" Header="Comment" Width="*" MinWidth="200">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
             <!--<DataGrid.RowDetailsTemplate>
                 <DataTemplate>
