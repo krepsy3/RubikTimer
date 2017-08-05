@@ -6,10 +6,14 @@
         xmlns:local="clr-namespace:RubikStatEditor"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" SizeChanged="Window_SizeChanged">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </Window.Resources>
     <Grid>
         <DataGrid x:Name="dataGrid" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents" MinWidth="200">
+                <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents" Width="*" MinWidth="200">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
                             <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
@@ -17,7 +21,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time" MinWidth="200">
+                <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time" Width="0.5*" MinWidth="100">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
                             <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
@@ -25,7 +29,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding Path=Info}" Header="Info" MinWidth="200">
+                <DataGridTextColumn Binding="{Binding Path=Info}" Header="Info" Width="*" MinWidth="200">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
                             <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
@@ -41,12 +45,11 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>
-            <!--<DataGrid.RowDetailsTemplate>
+            <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=Comment}" Visibility="{Binding Path=IsStatistic}"/>
+                    <Button Content="Convert to Statistic" HorizontalAlignment="Left" Width="Auto" Visibility="{Binding Path=ChangeToStatOpt, Converter={StaticResource BoolToVisConverter} }" Padding="3" Margin="5,0,0,0" Click="ConvertToStatistic"/>
                 </DataTemplate>
-            </DataGrid.RowDetailsTemplate>-->
+            </DataGrid.RowDetailsTemplate>
         </DataGrid>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Margin="432,10,0,0" Click="button_Click"/>
     </Grid>
 </Window>
