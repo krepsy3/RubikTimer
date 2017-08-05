@@ -12,6 +12,8 @@
         <CommandBinding Command="ApplicationCommands.New" CanExecute="CanCreateFile" Executed="CreateFile" />
         <CommandBinding Command="ApplicationCommands.Open" CanExecute="CanOpenFile" Executed="OpenFile" />
         <CommandBinding Command="ApplicationCommands.Replace" CanExecute="CanChangeFolder" Executed="ChangeFolder" />
+        <CommandBinding Command="EditingCommands.AlignCenter" CanExecute="CanEdit" Executed="EditStats" />
+        <CommandBinding Command="ApplicationCommands.Help" CanExecute="CanHelp" Executed="DisplayHelp" />
     </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="10,0">
@@ -19,6 +21,7 @@
                 <MenuItem Header="Create new statistic file" Command="ApplicationCommands.New" />
                 <MenuItem Header="Select statistic file" Command="ApplicationCommands.Open" />
                 <MenuItem Header="Change User data Folder" Command="ApplicationCommands.Replace" />
+                <MenuItem Header="Edit statistic file" Command="EditingCommands.AlignCenter" />
                 <MenuItem Header="Exit" Click="Exit" />
             </MenuItem>
 
@@ -26,7 +29,7 @@
 
             <MenuItem Header="Help">
                 <MenuItem Header="About" />
-                <MenuItem Header="View Help" />
+                <MenuItem Header="View Help" Command="ApplicationCommands.Help" />
             </MenuItem>
         </Menu>
         <Grid Margin="15" Name="MainGrid">

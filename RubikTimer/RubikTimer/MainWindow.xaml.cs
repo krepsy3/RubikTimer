@@ -298,6 +298,12 @@ namespace RubikTimer
         private void CanChangeFolder(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void ChangeFolder(object sender, ExecutedRoutedEventArgs e) { }
 
+        private void CanEdit(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
+        private void EditStats(object sender, ExecutedRoutedEventArgs e) { MessageBox.Show("edit"); }
+
+        private void CanHelp(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        private void DisplayHelp(object sender, ExecutedRoutedEventArgs e) { }
+
         private void Exit(object sender, RoutedEventArgs e) { Close(); }
 
         private void ClosingWindow(object sender, CancelEventArgs e)
