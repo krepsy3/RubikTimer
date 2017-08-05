@@ -34,6 +34,7 @@ namespace RubikStatEditor
                 {
                     if (IsStatistic)
                     {
+                        // converting to simple line in file
                         _lineText += value;
                         IsStatistic = false;
                         UpdateAllProperties();
@@ -45,6 +46,14 @@ namespace RubikStatEditor
                 {
                     // converting to Statistic
                     IsStatistic = true;
+
+                    if (statistic == null)
+                    {
+                        // creating new instance
+                        statistic = new Statistic(TimeSpan.Zero, "");
+                        Comment = _lineText;
+                    }
+
                     UpdateAllProperties();
                 }
             }
@@ -54,15 +63,21 @@ namespace RubikStatEditor
         {
             get
             {
-                return (IsStatistic) ? statistic.SolveTime.Ticks.ToString() : "";
+                return (IsStatistic) ? statistic.SolveTime.ToString() : "";
             }
             set
             {
                 if (IsStatistic)
                 {
-                    long ticks = 0;
-                    long.TryParse(value, out ticks);
-                    statistic.SolveTime = TimeSpan.FromTicks(ticks);
+                    TimeSpan solveTime;
+                    if (TimeSpan.TryParse(value, out solveTime))
+                    {
+                        statistic.SolveTime = solveTime;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid format {hh:mm:ss.FFFFFFF}.\nAn example: 1 hour, 23 minutes, 45 seconds and 6789012 ticks would look like 01:23:45.6789012", "Invalid format", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
