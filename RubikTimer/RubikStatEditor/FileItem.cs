@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using RubikTimer;
 
-namespace RUbil
+namespace RubikStatEditor
 {
     class FileItem
     {

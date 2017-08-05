@@ -14,3 +14,6 @@ C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEdit
 C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.csproj.GenerateResource.Cache
 C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RUbil.exe
 C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RUbil.pdb
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\bin\Debug\RubikStatEditor.exe.config
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.exe
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.pdb
