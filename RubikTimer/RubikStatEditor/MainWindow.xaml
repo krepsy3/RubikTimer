@@ -1,19 +1,25 @@
-﻿ <Window x:Class="RubikStatEditor.MainWindow"
+﻿<Window x:Class="RubikStatEditor.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RubikStatEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525" SizeChanged="Window_SizeChanged">
     <Grid>
-        <DataGrid x:Name="dataGrid" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" DataContext="{Binding Stats}">
+        <DataGrid x:Name="dataGrid" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Line contents"/>
-                <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Solve time"/>
-                <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Statistic info"/>
-                <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Comment"/>
+                <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents"/>
+                <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time"/>
+                <DataGridTextColumn Binding="{Binding Path=Info}" Header="Statistic info"/>
+                <DataGridTextColumn Binding="{Binding Path=Comment}" Header="Comment" Width="*"/>
             </DataGrid.Columns>
+            <!--<DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=Comment}" Visibility="{Binding Path=IsStatistic}"/>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>-->
         </DataGrid>
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Margin="432,10,0,0" Click="button_Click"/>
     </Grid>
 </Window>
