@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RUbil.Properties
+namespace RubikStatEditor.Properties
 {
 
 
