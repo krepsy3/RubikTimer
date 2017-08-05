@@ -42,8 +42,21 @@ namespace RubikStatEditor
             }
             catch
             {
-                MessageBox.Show("Can not open the file.");
+                MessageBox.Show("Could not open file.");
             }
+
+            dataGrid.ItemsSource = fileItems;
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            //fileItems.Add(new FileItem(new RubikTimer.Statistic(TimeSpan.FromSeconds(10), "info"), "Comment", "Line text"));
+            fileItems.ElementAt(1).SolveTime = "";
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }

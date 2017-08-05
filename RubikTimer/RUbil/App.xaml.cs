@@ -21,7 +21,7 @@ namespace RubikStatEditor
 
             if (e.Args.Length == 0)
             {
-                // opening RubikStatEditor.exe not .stxt file
+                // opening RubikStatEditor.exe not a .stxt file
                 MessageBox.Show("If you want to edit statistics open Rubik time and...."); // NEDODELANO
                 Shutdown();
             }

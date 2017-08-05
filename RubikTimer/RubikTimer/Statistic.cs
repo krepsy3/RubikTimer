@@ -33,7 +33,15 @@ namespace RubikTimer
         public static Statistic operator /(Statistic s1, int k) { return new Statistic(new TimeSpan(s1.SolveTime.Ticks / k), ""); }
         public static Statistic operator /(Statistic s1, Statistic s2) { return new Statistic(new TimeSpan(s1.SolveTime.Ticks / s2.SolveTime.Ticks), ""); }
 
-        public static bool operator ==(Statistic s1, Statistic s2) { return (s1.SolveTime == s2.SolveTime && s1.Info == s2.Info); }
+        public static bool operator ==(Statistic s1, Statistic s2)
+        {
+            if (ReferenceEquals(s1, s2))
+                return true;
+            else if (ReferenceEquals(s1, null) || ReferenceEquals(s2, null))
+                return false;
+
+            return s1.Equals(s2);
+        }
         public static bool operator !=(Statistic s1, Statistic s2) { return !(s1 == s2); }
         public static bool operator <(Statistic s1, Statistic s2) { return s1.CompareTo(s2) < 0; }
         public static bool operator >(Statistic s1, Statistic s2) { return s1.CompareTo(s2) > 0; }
