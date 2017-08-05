@@ -22,7 +22,7 @@ namespace RubikStatEditor
             if (e.Args.Length == 0)
             {
                 // opening RubikStatEditor.exe not .stxt file
-                MessageBox.Show("To edit statistic files, please open the main app (RubikTimer.exe) and select Edit Statistic Files. Do you wish to launch now?","Fatal error",MessageBoxButton.OKCancel,MessageBoxImage.Error,MessageBoxResult.OK);
+                MessageBox.Show("To edit statistic files, please open the main app (RubikTimer.exe) and select Edit Statistic Files. Do you wish to launch it now?","Fatal error",MessageBoxButton.OKCancel,MessageBoxImage.Error,MessageBoxResult.OK);
                 Shutdown();
             }
             else

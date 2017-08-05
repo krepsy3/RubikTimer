@@ -1,0 +1,16 @@
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\bin\Debug\RubikStatEditor.exe.config
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.csprojResolveAssemblyReference.cache
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\MainWindow.g.cs
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\App.g.cs
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor_MarkupCompile.cache
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor_MarkupCompile.lref
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\bin\Debug\RubikStatEditor.exe
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\bin\Debug\RubikStatEditor.pdb
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\bin\Debug\RubikTimer.exe
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\bin\Debug\RubikTimer.pdb
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\MainWindow.baml
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.g.resources
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.Properties.Resources.resources
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.csproj.GenerateResource.Cache
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.exe
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikStatEditor\obj\Debug\RubikStatEditor.pdb
