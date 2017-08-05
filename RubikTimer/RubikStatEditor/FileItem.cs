@@ -130,11 +130,7 @@ namespace RubikStatEditor
 
         private void UpdateAllProperties()
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(String.Empty));
-                // String.Empty is doing the trick with updating all properties
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
         }
     }
 }
