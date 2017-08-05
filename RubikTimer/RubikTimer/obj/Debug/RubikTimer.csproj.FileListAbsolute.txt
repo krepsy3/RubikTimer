@@ -32,3 +32,14 @@ C:\Users\Jirik\Documents\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\MainW
 C:\Users\Jirik\Documents\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.g.resources
 C:\Users\Jirik\Documents\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.Properties.Resources.resources
 C:\Users\Jirik\Documents\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.csproj.GenerateResource.Cache
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\bin\Debug\RubikTimer.exe
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\bin\Debug\RubikTimer.pdb
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.csprojResolveAssemblyReference.cache
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\MainWindow.g.cs
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\App.g.cs
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer_MarkupCompile.cache
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer_MarkupCompile.lref
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\MainWindow.baml
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.g.resources
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.Properties.Resources.resources
+C:\Users\Kryštof\Documents\Dokumenty\GitHub\RubikTimer\RubikTimer\RubikTimer\obj\Debug\RubikTimer.csproj.GenerateResource.Cache

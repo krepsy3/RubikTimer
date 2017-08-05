@@ -12,11 +12,11 @@ namespace RUbil
     {
         public List<FileItem> LoadFileItemsFromFile(string path)
         {
-            List<FileItem> statistics = new List<FileItem>();
+            List<FileItem> items = new List<FileItem>();
 
 
 
-            return statistics;
+            return items;
         }
     }
 }
