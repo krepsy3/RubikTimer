@@ -305,33 +305,38 @@ namespace RubikTimer
             if (MessageBox.Show("Are you sure you want to quit?", "Exit confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No) e.Cancel = true;
             else
             {
-                try
+                SaveConfig();
+            }
+        }
+
+        private void SaveConfig()
+        {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(App.filepath, false))
                 {
-                    using (StreamWriter sw = new StreamWriter(App.filepath, false))
+                    for (int i = 0; i < App.configitems.Length; i++)
                     {
-                        for (int i = 0; i < App.configitems.Length; i++)
+                        switch (i)
                         {
-                            switch (i)
-                            {
-                                case 0: sw.WriteLine(App.configitems[i] + InspectionCheckBox.IsChecked); break;
-                                case 1: sw.WriteLine(App.configitems[i] + InspectionSeconds); break;
-                                case 2: sw.WriteLine(App.configitems[i] + SolveCheckBox.IsChecked); break;
-                                case 3: sw.WriteLine(App.configitems[i] + AutoScrambleCheckBox.IsChecked); break;
-                                case 4: sw.WriteLine(App.configitems[i] + ScrambleLenghtTextBox.Text); break;
-                                case 5: sw.WriteLine(App.configitems[i] + Type); break;
-                                case 6: sw.WriteLine(App.configitems[i] + statsmanager.DirPath); break;
-                                case 7: sw.WriteLine(App.configitems[i] + statsmanager.CurrentFileName); break;
-                            }
+                            case 0: sw.WriteLine(App.configitems[i] + InspectionCheckBox.IsChecked); break;
+                            case 1: sw.WriteLine(App.configitems[i] + InspectionSeconds); break;
+                            case 2: sw.WriteLine(App.configitems[i] + SolveCheckBox.IsChecked); break;
+                            case 3: sw.WriteLine(App.configitems[i] + AutoScrambleCheckBox.IsChecked); break;
+                            case 4: sw.WriteLine(App.configitems[i] + ScrambleLenghtTextBox.Text); break;
+                            case 5: sw.WriteLine(App.configitems[i] + Type); break;
+                            case 6: sw.WriteLine(App.configitems[i] + statsmanager.DirPath); break;
+                            case 7: sw.WriteLine(App.configitems[i] + statsmanager.CurrentFileName); break;
                         }
-
-                        sw.Flush();
                     }
-                }
 
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Exception was thrown while saving the config file: " + ex.Message, "Config file exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    sw.Flush();
                 }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception was thrown while saving the config file: " + ex.Message, "Config file exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
