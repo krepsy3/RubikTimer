@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 using RubikTimer;
 
@@ -10,27 +11,28 @@ namespace RubikStatEditor
 {
     public class FileItem
     {
-        private bool isStatistic;
         private Statistic statistic;
 
         private string lineText;
         private string _solveTime;
         private string _info;
 
+        public bool IsStatistic { get; private set; }
+
         public string LineContent
         {
             get
             {
-                return (isStatistic) ? "Statistic" : lineText;
+                return (IsStatistic) ? "Statistic" : lineText;
             }
             set
             {
                 if (value.ToLower() != "statistic")
                 {
-                    if (isStatistic)
+                    if (IsStatistic)
                     {
                         lineText += value;
-                        isStatistic = false;
+                        IsStatistic = false;
                     }
                     else
                         lineText = value;
@@ -42,7 +44,7 @@ namespace RubikStatEditor
         {
             get
             {
-                return (isStatistic) ? statistic.SolveTime.ToString() : _solveTime;
+                return (IsStatistic) ? statistic.SolveTime.ToString() : _solveTime;
             }
             set
             {
@@ -54,7 +56,7 @@ namespace RubikStatEditor
         {
             get
             {
-                return (isStatistic) ? statistic.Info : _info;
+                return (IsStatistic) ? statistic.Info : _info;
             }
             set
             {
@@ -64,14 +66,19 @@ namespace RubikStatEditor
 
         public string Comment { get; set; }
 
+        public bool ChangeToStatOpt { get; private set; }
+
         public FileItem(Statistic statistic, string comment, string lineText)
         {
             if (statistic != null)
             {
-                isStatistic = true;
+                IsStatistic = true;
                 this.statistic = statistic;
                 Comment = comment;
+                ChangeToStatOpt = false;
             }
+            else
+                ChangeToStatOpt = true;
 
             this.lineText = lineText;
         }
