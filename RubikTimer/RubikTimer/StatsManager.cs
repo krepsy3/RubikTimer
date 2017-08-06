@@ -48,6 +48,9 @@ namespace RubikTimer
             StatFileLoaded = LoadCurrentFile();
         }
 
+        public void AddStatistic(Statistic statistic) { Stats.Add(statistic); }
+        public void RemoveLastStatistic() { Stats.RemoveAt(-Stats.Count); }
+
         private bool LoadCurrentFile()
         {
             bool result = true;
@@ -77,7 +80,42 @@ namespace RubikTimer
 
         public void SaveCurrentFile()
         {
+            string[] lines = File.ReadAllLines(CurrentFile);
+            List<string> newlines = new List<string>();
+            int index = 0;
 
+            foreach (string line in lines)
+            {
+                if (line.StartsWith("_"))
+                {
+                    string[] temp = line.Split('~');
+                    string comment = "";
+                    if (temp.Length >= 3)
+                    {
+                        for (int i = 2; i < temp.Length; i++)
+                        {
+                            comment += "~";
+                            comment += temp[i];
+                        }
+                    }
+
+                    newlines.Add("_" + Stats[index].SolveTime.Ticks.ToString() + "~" + Stats[index].Info + comment);
+                    index++;
+                }
+
+                else
+                {
+                    newlines.Add(line);
+                }
+            }
+
+            while(index < Stats.Count)
+            {
+                newlines.Add("_" + Stats[index].SolveTime.Ticks.ToString() + "~" + Stats[index].Info);
+                index++;
+            }
+
+            File.WriteAllLines(CurrentFile, newlines);
         }
 
         public void ChangeCurrentFile(string filename)

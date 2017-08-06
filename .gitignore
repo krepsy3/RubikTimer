@@ -1,2 +1,4 @@
 
-RubikTimer/.vs/RubikTimer/v14/.suo
+RubikTimer/.vs/*
+RubikTimer/RubikTimer/obj/*
+RubikTimer/RubikTimer/obj/*
