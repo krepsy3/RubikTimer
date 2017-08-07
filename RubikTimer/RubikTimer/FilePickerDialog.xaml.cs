@@ -21,11 +21,13 @@ namespace RubikTimer
         public ObservableCollection<string> Files { get; private set; }
         public int SelectedIndex { get { return filesView != null ? filesView.SelectedIndex : -1; } }
 
-        public FilePickerDialog(List<string> files)
+        public FilePickerDialog(List<string> files, string title = "File Pick", string message = "Please pick a file from the list:")
         {
             Files = new ObservableCollection<string>(files);
             InitializeComponent();
             DataContext = this;
+            Title = title;
+            messageTextBlock.Text = message;
         }
 
         private void CanSelect(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = filesView != null ? filesView.SelectedIndex >= 0 : false; }

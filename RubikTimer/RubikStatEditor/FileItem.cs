@@ -13,11 +13,11 @@ namespace RubikStatEditor
     public class FileItem : INotifyPropertyChanged
     {
         private Statistic statistic;
-
         private LineContents _lineContent;
         private string _comment;
 
         enum LineContents { Statistic, TextComment, InvalidStatisticLine }
+        private readonly string[] lineContentsRep = new string[] { "Statistic", "Text Comment", "Invalid Statistic Line"};
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -25,7 +25,7 @@ namespace RubikStatEditor
         {
             get
             {
-                return _lineContent.ToString();
+                return lineContentsRep[(int)_lineContent];
             }
         }
 

@@ -76,6 +76,9 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomCommands.cs" />
+    <Compile Include="FileNameDialog.xaml.cs">
+      <DependentUpon>FileNameDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FilePickerDialog.xaml.cs">
       <DependentUpon>FilePickerDialog.xaml</DependentUpon>
     </Compile>
@@ -87,6 +90,10 @@
     <Compile Include="StatsManager.cs" />
     <Compile Include="Timer.cs" />
     <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FileNameDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

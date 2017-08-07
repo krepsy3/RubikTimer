@@ -37,13 +37,15 @@ namespace RubikStatEditor
             {
                 fileItems = new ObservableCollection<FileItem>(fileManager.LoadFileItemsFromFile(App.args[0]));
             }
-            catch (Exception e) when (e is ArgumentException || e is ArgumentNullException || e is DirectoryNotFoundException || e is FileNotFoundException || e is PathTooLongException)
+            catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException || ex is DirectoryNotFoundException || ex is FileNotFoundException || ex is PathTooLongException)
             {
-                MessageBox.Show("Invalid file path.");
+                MessageBox.Show("Selected Statistic file path is invalid", "Loading error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Could not open file.");
+                MessageBox.Show("File opening failed due to following exception: " + ex.Message,"Loading error",MessageBoxButton.OK,MessageBoxImage.Error);
+                Close();
             }
 
             dataGrid.ItemsSource = fileItems;
@@ -58,7 +60,7 @@ namespace RubikStatEditor
 
         private void RemoveFileItem(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to remove this line?", "Remove line", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to remove this line?", "Remove line confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 fileItems.Remove((FileItem)dataGrid.SelectedItem);
         }
 
@@ -67,9 +69,9 @@ namespace RubikStatEditor
             fileItems.Add(new FileItem(null, ""));
         }
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void SortOriginally(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -94,7 +96,7 @@ namespace RubikStatEditor
 
         private void Exit(object sender, RoutedEventArgs e)
         {
-
+            
         }
         #endregion
     }

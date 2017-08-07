@@ -80,6 +80,21 @@ namespace RubikTimer
             ((MenuItem)PuzzleSelectMenuItem.Items[Type]).IsChecked = true;
         }
 
+        private void WinContRendered(object sender, EventArgs e)
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+                foreach(string arg in args)
+                {
+                    switch (arg)
+                    {
+                        case "/edit": CustomCommands.Edit.Execute(null,null); break;
+                    }
+                }
+            }
+        }
+
         private void KeyPress(object sender, KeyEventArgs e)
         {
             if (!e.IsRepeat)
@@ -303,7 +318,7 @@ namespace RubikTimer
         {
             List<string> files = statsmanager.GetStatisticFiles(false);
             files.Remove(statsmanager.CurrentFileName);
-            FilePickerDialog d = new FilePickerDialog(files);
+            FilePickerDialog d = new FilePickerDialog(files,"Pick a file for editing","Please pick a file from the list to be edited:");
             if (!((bool)d.ShowDialog())) return;
             else
             {
