@@ -14,62 +14,97 @@
             <Setter Property="BorderBrush" Value="Red" />
         </Style>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="1"/>
-        </Grid.RowDefinitions>
-        <!-- ROW ONE -->
-        <DataGrid x:Name="dataGrid" Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" >
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents" Width="*" MinWidth="200" IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time" MinWidth="100" Width="100" CanUserResize="False" IsReadOnly="True">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding Path=Info}" Header="Info" Width="*" MinWidth="200">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-
-                <DataGridTextColumn Binding="{Binding Path=Comment}" Header="Comment" Width="*" MinWidth="200">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTemplateColumn Width="90">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Remove Line" Click="RemoveFileItem" Margin="2"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <Button Content="Convert to Text comment" HorizontalAlignment="Left" Width="Auto" Visibility="{Binding Path=ChangeToStatOpt, Converter={StaticResource BoolToVisConverter} }" Padding="3" Margin="5,0,0,0" Click="ConvertToTextComment"/>
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
-        </DataGrid>
+    <DockPanel>
         
-        <!-- ROW TWO -->
-        <Button Grid.Row="1" Content="Add Line"/>
-    </Grid>
+            <Menu Padding="10,0" DockPanel.Dock="Top">
+                <MenuItem Header="File">
+                    <MenuItem Header="Save"/>
+                    <MenuItem Header="Save as"/>
+                    <MenuItem Header="Exit"/>
+                </MenuItem>
+                <MenuItem Header="Help">
+                    <MenuItem Header="Help"/>
+                    <MenuItem Header="About"/>
+                </MenuItem>
+
+            </Menu>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <DataGrid x:Name="dataGrid" Grid.Row="0" HorizontalAlignment="Stretch" Margin="4" VerticalAlignment="Stretch" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" RowHeaderWidth="0" >
+                <!--<DataGrid.ItemContainerStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Setter Property="LayoutTransform">
+                            <Setter.Value>
+                                <ScaleTransform x:Name="transform" />
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:2" />
+                                            <DoubleAnimation Storyboard.TargetProperty="LayoutTransform.ScaleY" From="0" Duration="0:0:.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.ItemContainerStyle>-->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents" Width="108" MinWidth="108" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time" MinWidth="100" Width="100" CanUserResize="False" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding Path=Info}" Header="Info" Width="*" MinWidth="200">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding Path=Comment}" Header="Comment" Width="*" MinWidth="200">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Width="90">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Remove Line" Click="RemoveFileItem" Margin="2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <Button Content="Convert to TextComment" HorizontalAlignment="Left" Width="Auto" Visibility="{Binding Path=ChangeToStatOpt, Converter={StaticResource BoolToVisConverter} }" Padding="3" Margin="5,0,0,0" Click="ConvertToTextComment"/>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+
+            <Button x:Name="btn_AddLine" Grid.Row="1" Content="Add Line" Width="75" HorizontalAlignment="Left" Height="20" Margin="4,0,0,4" Click="btn_AddLine_Click"/>
+        </Grid>
+    </DockPanel>
 </Window>

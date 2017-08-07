@@ -60,6 +60,12 @@ namespace RubikStatEditor
                 fileItems.Remove((FileItem)dataGrid.SelectedItem);
         }
 
+        private void btn_AddLine_Click(object sender, RoutedEventArgs e)
+        {
+            fileItems.Add(new FileItem(null, ""));
+            dataGrid.ScrollIntoView(fileItems[fileItems.Count - 1]);
+        }
+
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             /*ICollectionView dataView = CollectionViewSource.GetDefaultView(dataGrid.ItemsSource);
