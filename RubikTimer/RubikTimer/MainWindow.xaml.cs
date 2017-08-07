@@ -77,6 +77,8 @@ namespace RubikTimer
             }
 
             ((MenuItem)PuzzleSelectMenuItem.Items[Type]).IsChecked = true;
+
+            new FilePickerDialog(new List<string> { "stat0", "stat1" }).ShowDialog();
         }
 
         private void KeyPress(object sender, KeyEventArgs e)
@@ -298,7 +300,10 @@ namespace RubikTimer
         private void ChangeFolder(object sender, ExecutedRoutedEventArgs e) { }
 
         private void CanEdit(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
-        private void EditStats(object sender, ExecutedRoutedEventArgs e) { MessageBox.Show("edit"); }
+        private void EditStats(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
 
         private void CanHelp(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
         private void DisplayHelp(object sender, ExecutedRoutedEventArgs e) { }

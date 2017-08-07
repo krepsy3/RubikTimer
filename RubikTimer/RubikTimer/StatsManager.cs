@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace RubikTimer
 {
@@ -16,6 +17,7 @@ namespace RubikTimer
         private string _dirpath;
         public string DirPath { get { return _dirpath; } private set { _dirpath = value; UpdateProperty("DirPath"); } }
         private readonly string extension = ".stxt";
+        private readonly string editorname = "RubikStatEditor.exe";
         public string CurrentFileName { get; private set; }
         private string CurrentFile { get { return Path.Combine(DirPath, CurrentFileName + extension); } }
 
@@ -123,6 +125,58 @@ namespace RubikTimer
             SaveCurrentFile();
             CurrentFileName = filename;
             LoadCurrentFile();
+        }
+
+        public bool CreateCurrentFile(string filename, bool overwrite)
+        {
+            if (File.Exists(Path.Combine(DirPath, filename + extension)) && !overwrite) return false;
+            else
+            {
+                File.Create(Path.Combine(DirPath, filename + extension));
+                return true;
+            }
+        }
+
+        public void ChangeUserDirectory(string newpath)
+        {
+            Directory.Move(DirPath, newpath);
+            DirPath = newpath;
+        }
+
+        public List<string> GetStatisticFiles(bool getfullpath)
+        {
+            List<string> result = new List<string>();
+
+            string[] files = Directory.GetFiles(DirPath, "*" + extension, SearchOption.TopDirectoryOnly);
+            foreach(string file in files)
+            {
+                string cleanfile = file;
+                if(!getfullpath)
+                {
+                    cleanfile = cleanfile.Trim('\\');
+                    cleanfile = cleanfile.Substring((DirPath.Trim('\\')).Length);
+                    cleanfile.Remove(cleanfile.Length - extension.Length);
+                }
+
+                result.Add(cleanfile);
+            }
+
+            return result;
+        }
+
+        public bool LaunchEditor(string filename)
+        {
+            bool result = true;
+
+            if (File.Exists(editorname))
+            {
+                Process editor = new Process();
+                editor.StartInfo = new ProcessStartInfo(editorname, Path.Combine(DirPath, filename + extension));
+                editor.Start();
+            }
+            else result = false;
+
+            return result;
         }
     }
 }
