@@ -90,18 +90,21 @@ namespace RubikTimer
             {
                 if (line.StartsWith("_"))
                 {
-                    string[] temp = line.Split('~');
-                    string comment = "";
-                    if (temp.Length >= 3)
+                    if ((+index) > Stats.Count)
                     {
-                        for (int i = 2; i < temp.Length; i++)
+                        string[] temp = line.Split('~');
+                        string comment = "";
+                        if (temp.Length >= 3)
                         {
-                            comment += "~";
-                            comment += temp[i];
+                            for (int i = 2; i < temp.Length; i++)
+                            {
+                                comment += "~";
+                                comment += temp[i];
+                            }
                         }
-                    }
 
-                    newlines.Add("_" + Stats[index].SolveTime.Ticks.ToString() + "~" + Stats[index].Info + comment);
+                        newlines.Add("_" + Stats[index].SolveTime.Ticks.ToString() + "~" + Stats[index].Info + comment);
+                    }
                     index++;
                 }
 

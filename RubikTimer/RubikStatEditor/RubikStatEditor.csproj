@@ -64,7 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileItem.cs" />
-    <Compile Include="FileReader.cs" />
+    <Compile Include="FileManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -102,6 +102,20 @@
       <Project>{123a0c13-75ec-408c-81f7-221325db76b6}</Project>
       <Name>RubikTimer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="resources\about.ico" />
+    <Resource Include="resources\about.png" />
+    <Resource Include="resources\editor.ico" />
+    <Resource Include="resources\editor.png" />
+    <Resource Include="resources\file.ico" />
+    <Resource Include="resources\file.png" />
+    <Resource Include="resources\help.ico" />
+    <Resource Include="resources\help.png" />
+    <Resource Include="resources\main.ico" />
+    <Resource Include="resources\main.png" />
+    <Resource Include="resources\timer.ico" />
+    <Resource Include="resources\timer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
