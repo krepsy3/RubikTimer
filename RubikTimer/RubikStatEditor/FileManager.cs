@@ -9,10 +9,14 @@ using RubikTimer;
 
 namespace RubikStatEditor
 {
-    class FileReader
+    class FileManager
     {
+        private string filePath;
+
         public List<FileItem> LoadFileItemsFromFile(string path)
         {
+            filePath = path;
+
             List<FileItem> fileItems = new List<FileItem>();
 
             string[] lines = File.ReadAllLines(path);
@@ -24,17 +28,17 @@ namespace RubikStatEditor
 
                 if (line.StartsWith("_"))
                 {
-                    // it is a statistic
                     string[] data = line.Split('~');
 
                     long timeInTicks = 0;
                     if (long.TryParse(data[0].Substring(1), out timeInTicks))
                     {
+                        // it is a statistic
                         statistic = new Statistic(TimeSpan.FromTicks(timeInTicks), (data.Length >= 2) ? data[1] : "");
                         comment = (data.Length == 3) ? data[2] : "";
                     }
                     else
-                        comment = line;
+                        comment = line; // it's an invalid line that looks like statistic
                 }
                 else
                     comment = line;
@@ -43,6 +47,16 @@ namespace RubikStatEditor
             }
 
             return fileItems;
+        }
+
+        public void SaveFileItems(List<FileItem> fileItems)
+        {
+
+        }
+
+        public void SaveFileItemsToFile(List<FileItem> fileItems, string path)
+        {
+
         }
     }
 }

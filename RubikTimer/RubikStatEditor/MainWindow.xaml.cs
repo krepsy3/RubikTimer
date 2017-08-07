@@ -23,17 +23,19 @@ namespace RubikStatEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FileManager fileManager;
+
         private ObservableCollection<FileItem> fileItems;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            FileReader fileReader = new FileReader();
+            fileManager = new FileManager();
 
             try
             {
-                fileItems = new ObservableCollection<FileItem>(fileReader.LoadFileItemsFromFile(App.args[0]));
+                fileItems = new ObservableCollection<FileItem>(fileManager.LoadFileItemsFromFile(App.args[0]));
             }
             catch (Exception e) when (e is ArgumentException || e is ArgumentNullException || e is DirectoryNotFoundException || e is FileNotFoundException || e is PathTooLongException)
             {
@@ -76,5 +78,24 @@ namespace RubikStatEditor
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
         }
+
+        #region File Menu
+        private void SaveFile(object sender, RoutedEventArgs e)
+        {
+            fileManager.SaveFileItems(new List<FileItem>(fileItems));
+        }
+
+        private void SaveFileAs(object sender, RoutedEventArgs e)
+        {
+            /*Open
+
+            fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), path);*/
+        }
+
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
     }
 }

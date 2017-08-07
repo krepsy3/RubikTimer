@@ -18,9 +18,9 @@
         
             <Menu Padding="10,0" DockPanel.Dock="Top">
                 <MenuItem Header="File">
-                    <MenuItem Header="Save"/>
-                    <MenuItem Header="Save as"/>
-                    <MenuItem Header="Exit"/>
+                    <MenuItem Header="Save" Click="SaveFile"/>
+                    <MenuItem Header="Save as" Click="SaveFileAs"/>
+                    <MenuItem Header="Exit" Click="Exit"/>
                 </MenuItem>
                 <MenuItem Header="Help">
                     <MenuItem Header="Help"/>
