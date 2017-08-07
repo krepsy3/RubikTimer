@@ -18,9 +18,6 @@ using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 
 namespace RubikTimer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private enum SolvePhase { Scramble, Inspection, Solve, End }
@@ -273,7 +270,9 @@ namespace RubikTimer
             else MainGrid.RowDefinitions[3].Height = new GridLength();
         }
 
-        private void PuzzleSelected(object sender, RoutedEventArgs e)
+        #region Commands
+        private void CanSelectPuzzle(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
+        private void SelectPuzzle(object sender, ExecutedRoutedEventArgs e)
         {
             foreach (MenuItem m in PuzzleSelectMenuItem.Items)
             {
@@ -304,7 +303,12 @@ namespace RubikTimer
         private void CanHelp(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
         private void DisplayHelp(object sender, ExecutedRoutedEventArgs e) { }
 
-        private void Exit(object sender, RoutedEventArgs e) { Close(); }
+        private void CanAbout(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        private void DisplayAbout(object sender, ExecutedRoutedEventArgs e) { }
+
+        private void CanExit(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
+        private void Exit(object sender, ExecutedRoutedEventArgs e) { Close(); }
+        #endregion
 
         private void ClosingWindow(object sender, CancelEventArgs e)
         {

@@ -12,8 +12,11 @@
         <CommandBinding Command="ApplicationCommands.New" CanExecute="CanCreateFile" Executed="CreateFile" />
         <CommandBinding Command="ApplicationCommands.Open" CanExecute="CanOpenFile" Executed="OpenFile" />
         <CommandBinding Command="ApplicationCommands.Replace" CanExecute="CanChangeFolder" Executed="ChangeFolder" />
-        <CommandBinding Command="EditingCommands.AlignCenter" CanExecute="CanEdit" Executed="EditStats" />
+        <CommandBinding Command="local:CustomCommands.Edit" CanExecute="CanEdit" Executed="EditStats" />
         <CommandBinding Command="ApplicationCommands.Help" CanExecute="CanHelp" Executed="DisplayHelp" />
+        <CommandBinding Command="local:CustomCommands.About" CanExecute="CanAbout" Executed="DisplayAbout" />
+        <CommandBinding Command="local:CustomCommands.Exit" CanExecute="CanExit" Executed="Exit" />
+        <CommandBinding Command="MediaCommands.Select" CanExecute="CanSelectPuzzle" Executed="SelectPuzzle" />
     </Window.CommandBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="10,0">
@@ -21,15 +24,21 @@
                 <MenuItem Header="Create new statistic file" Command="ApplicationCommands.New" />
                 <MenuItem Header="Select statistic file" Command="ApplicationCommands.Open" />
                 <MenuItem Header="Change User data Folder" Command="ApplicationCommands.Replace" />
-                <MenuItem Header="Edit statistic file" Command="EditingCommands.AlignCenter" />
-                <MenuItem Header="Exit" Click="Exit" />
+                <MenuItem Header="Edit statistic file" Command="local:CustomCommands.Edit" />
+                <MenuItem Header="Exit" Command="local:CustomCommands.Exit" />
             </MenuItem>
 
-            <MenuItem Header="Select Puzzle" Name="PuzzleSelectMenuItem" MenuItem.Click="PuzzleSelected" />
+            <MenuItem Header="Select Puzzle" Name="PuzzleSelectMenuItem">
+                <MenuItem.Resources>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Command" Value="MediaCommands.Select" />
+                    </Style>
+                </MenuItem.Resources>
+            </MenuItem>
 
             <MenuItem Header="Help">
-                <MenuItem Header="About" />
                 <MenuItem Header="View Help" Command="ApplicationCommands.Help" />
+                <MenuItem Header="About" Command="local:CustomCommands.About" />
             </MenuItem>
         </Menu>
         <Grid Margin="15" Name="MainGrid">
