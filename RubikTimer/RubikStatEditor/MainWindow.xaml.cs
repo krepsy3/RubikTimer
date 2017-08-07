@@ -63,15 +63,18 @@ namespace RubikStatEditor
         private void btn_AddLine_Click(object sender, RoutedEventArgs e)
         {
             fileItems.Add(new FileItem(null, ""));
-            dataGrid.ScrollIntoView(fileItems[fileItems.Count - 1]);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            /*ICollectionView dataView = CollectionViewSource.GetDefaultView(dataGrid.ItemsSource);
-            //clear the existing sort order
-            dataView.SortDescriptions.Clear();
-            dataView.Refresh();*/
+            
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }
