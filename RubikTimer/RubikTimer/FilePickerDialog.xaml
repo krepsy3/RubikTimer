@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RubikTimer"
         mc:Ignorable="d"
-        Title="File pick" Height="300" Width="300" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow">
+        Title="File pick" Height="300" Width="300" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" MouseDown="WinMouseDown" >
     <Window.CommandBindings>
         <CommandBinding Command="MediaCommands.Select" CanExecute="CanSelect" Executed="Select" />
     </Window.CommandBindings>
@@ -13,9 +13,9 @@
     <DockPanel>
         <TextBlock Text="Please pick a file from the list:" DockPanel.Dock="Top" Margin="10" />
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button Content="OK" Margin="10" Command="MediaCommands.Select" MinWidth="50" />
+            <Button Content="OK" Margin="10" MinWidth="50" Command="MediaCommands.Select" />
             <Button Content="Cancel" Margin="10" Click="Exit" MinWidth="50" />
         </StackPanel>
-        <ListView Margin="10" ItemsSource="{Binding Files}" x:Name="filesView" />
+        <ListView Margin="10" ItemsSource="{Binding Files}" x:Name="filesView" MouseDown="ListMouseDown"/>
     </DockPanel>
 </Window>

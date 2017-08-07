@@ -19,7 +19,7 @@ namespace RubikTimer
     public partial class FilePickerDialog : Window
     {
         public ObservableCollection<string> Files { get; private set; }
-        public int SelectedIndex { get { return filesView.IsInitialized ? filesView.SelectedIndex : -1; } }
+        public int SelectedIndex { get { return filesView != null ? filesView.SelectedIndex : -1; } }
 
         public FilePickerDialog(List<string> files)
         {
@@ -28,9 +28,13 @@ namespace RubikTimer
             DataContext = this;
         }
 
-        private void CanSelect(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = filesView.IsInitialized ? filesView.SelectedIndex >= 0 : false; }
+        private void CanSelect(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = filesView != null ? filesView.SelectedIndex >= 0 : false; }
         private void Select(object sender, ExecutedRoutedEventArgs e) { DialogResult = true; }
 
         private void Exit(object sender, RoutedEventArgs e) { DialogResult = false; }
+
+        private void WinMouseDown(object sender, MouseButtonEventArgs e) { filesView.SelectedIndex = -1; }
+
+        private void ListMouseDown(object sender, MouseButtonEventArgs e) { e.Handled = true; }
     }
 }

@@ -77,8 +77,6 @@ namespace RubikTimer
             }
 
             ((MenuItem)PuzzleSelectMenuItem.Items[Type]).IsChecked = true;
-
-            new FilePickerDialog(new List<string> { "stat0", "stat1" }).ShowDialog();
         }
 
         private void KeyPress(object sender, KeyEventArgs e)
