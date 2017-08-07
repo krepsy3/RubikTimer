@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using Microsoft.Win32;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 
 namespace RubikTimer
@@ -300,7 +301,21 @@ namespace RubikTimer
         private void CanEdit(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void EditStats(object sender, ExecutedRoutedEventArgs e)
         {
-
+            List<string> files = statsmanager.GetStatisticFiles(false);
+            files.Remove(statsmanager.CurrentFileName);
+            FilePickerDialog d = new FilePickerDialog(files);
+            if (!((bool)d.ShowDialog())) return;
+            else
+            {
+                try
+                {
+                    if (!statsmanager.LaunchEditor(files[d.SelectedIndex])) MessageBox.Show("RubikStatEditor.exe file seems to be missing. Try reinstalling the program.", "Editor failed to launch", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Editor failed to launch due to following exception: " + ex.Message, "Launch failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void CanHelp(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }

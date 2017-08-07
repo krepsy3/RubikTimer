@@ -153,9 +153,9 @@ namespace RubikTimer
                 string cleanfile = file;
                 if(!getfullpath)
                 {
-                    cleanfile = cleanfile.Trim('\\');
-                    cleanfile = cleanfile.Substring((DirPath.Trim('\\')).Length);
-                    cleanfile.Remove(cleanfile.Length - extension.Length);
+                    cleanfile = cleanfile.Substring(DirPath.Length);
+                    if (cleanfile.StartsWith("\\")) cleanfile = cleanfile.Substring(1);
+                    cleanfile = cleanfile.Remove(cleanfile.Length - extension.Length);
                 }
 
                 result.Add(cleanfile);
