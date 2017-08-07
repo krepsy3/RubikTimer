@@ -9,11 +9,20 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+        <Style x:Key="NormalCellStyle" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="1,1,0,0" />
+            <Setter Property="BorderBrush" Value="Red" />
+        </Style>
     </Window.Resources>
     <Grid>
-        <DataGrid x:Name="dataGrid" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1"/>
+        </Grid.RowDefinitions>
+        <!-- ROW ONE -->
+        <DataGrid x:Name="dataGrid" Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" AutoGenerateColumns="False" CanUserReorderColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents" Width="*" MinWidth="200">
+                <DataGridTextColumn Binding="{Binding Path=LineContent}" Header="Line contents" Width="*" MinWidth="200" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
                             <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
@@ -21,7 +30,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time" Width="0.5*" MinWidth="100">
+                <DataGridTextColumn Binding="{Binding Path=SolveTime}" Header="Solve time" MinWidth="100" Width="100" CanUserResize="False" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
                             <Setter Property="TextBlock.TextWrapping" Value="WrapWithOverflow"/>
@@ -44,12 +53,23 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+                <DataGridTemplateColumn Width="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Remove Line" Click="RemoveFileItem" Margin="2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
+
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <Button Content="Convert to Statistic" HorizontalAlignment="Left" Width="Auto" Visibility="{Binding Path=ChangeToStatOpt, Converter={StaticResource BoolToVisConverter} }" Padding="3" Margin="5,0,0,0" Click="ConvertToStatistic"/>
+                    <Button Content="Convert to Text comment" HorizontalAlignment="Left" Width="Auto" Visibility="{Binding Path=ChangeToStatOpt, Converter={StaticResource BoolToVisConverter} }" Padding="3" Margin="5,0,0,0" Click="ConvertToTextComment"/>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>
+        
+        <!-- ROW TWO -->
+        <Button Grid.Row="1" Content="Add Line"/>
     </Grid>
 </Window>

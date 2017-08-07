@@ -14,48 +14,18 @@ namespace RubikStatEditor
     {
         private Statistic statistic;
 
-        private string _lineText;
-        private string _solveTime;
+        private LineContents _lineContent;
         private string _comment;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        enum LineContents { Statistic, TextComment, InvalidStatisticLine }
 
-        public bool IsStatistic { get; private set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public string LineContent
         {
             get
             {
-                return (IsStatistic) ? "Statistic" : _lineText;
-            }
-            set
-            {
-                if (value.ToLower() != "statistic")
-                {
-                    if (IsStatistic)
-                    {
-                        // converting to simple line in file
-                        _lineText += value;
-                        IsStatistic = false;
-                        UpdateAllProperties();
-                    }
-                    else
-                        _lineText = value;
-                }
-                else if (value == "Statistic")
-                {
-                    // converting to Statistic
-                    IsStatistic = true;
-
-                    if (statistic == null)
-                    {
-                        // creating new instance
-                        statistic = new Statistic(TimeSpan.Zero, "");
-                        Comment = _lineText;
-                    }
-
-                    UpdateAllProperties();
-                }
+                return _lineContent.ToString();
             }
         }
 
@@ -63,22 +33,7 @@ namespace RubikStatEditor
         {
             get
             {
-                return (IsStatistic) ? statistic.SolveTime.ToString() : "";
-            }
-            set
-            {
-                if (IsStatistic)
-                {
-                    TimeSpan solveTime;
-                    if (TimeSpan.TryParse(value, out solveTime))
-                    {
-                        statistic.SolveTime = solveTime;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid format {hh:mm:ss.FFFFFFF}.\nAn example: 1 hour, 23 minutes, 45 seconds and 6789012 ticks would look like 01:23:45.6789012", "Invalid format", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
+                return (_lineContent == LineContents.Statistic) ? statistic.SolveTime.ToString() : "";
             }
         }
 
@@ -86,12 +41,11 @@ namespace RubikStatEditor
         {
             get
             {
-                return (IsStatistic) ? statistic.Info : "";
+                return (_lineContent == LineContents.Statistic) ? statistic.Info : "";
             }
             set
             {
-                if (IsStatistic)
-                    statistic.Info = value;
+                statistic.Info = value;
             }
         }
 
@@ -99,12 +53,18 @@ namespace RubikStatEditor
         {
             get
             {
-                return (IsStatistic) ? _comment : "";
+                return _comment;
             }
             set
             {
-                if (IsStatistic)
-                    _comment = value;
+                _comment = value;
+
+                if (value.StartsWith("_"))
+                {
+                    // converting to InvalidStatisticLine
+                    _lineContent = LineContents.InvalidStatisticLine;
+                    UpdateAllProperties();
+                }
             }
         }
 
@@ -112,25 +72,39 @@ namespace RubikStatEditor
         {
             get
             {
-                return !IsStatistic;
+                return _lineContent == LineContents.InvalidStatisticLine;
             }
         }
 
-        public FileItem(Statistic statistic, string comment, string lineText)
+        public FileItem(Statistic statistic, string comment)
         {
+            Comment = comment;
+
             if (statistic != null)
             {
-                IsStatistic = true;
                 this.statistic = statistic;
-                Comment = comment;
+                _lineContent = LineContents.Statistic;
             }
-
-            this._lineText = lineText;
+            else if (comment.StartsWith("_"))
+            {
+                _lineContent = LineContents.InvalidStatisticLine;
+                Comment = Comment.Substring(1); // remove '_' from start of comment
+            }
+            else
+                _lineContent = LineContents.TextComment;
         }
 
         private void UpdateAllProperties()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
+            // String.Empty is doing the trick with updating all properties
+        }
+
+        public void ConvertToTextComment()
+        {
+            Comment = Comment.Remove(0, 1); // remove "_" at position 0 in the string
+            _lineContent = LineContents.TextComment;
+            UpdateAllProperties();
         }
     }
 }

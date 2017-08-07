@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -44,26 +45,27 @@ namespace RubikStatEditor
             }
 
             dataGrid.ItemsSource = fileItems;
+            //dataGrid.ColumnFromDisplayIndex(4).SortMemberPath
         }
 
-        private void ConvertToStatistic(object sender, RoutedEventArgs e)
+        private void ConvertToTextComment(object sender, RoutedEventArgs e)
         {
-            if (dataGrid.SelectedIndex == -1) // nothing is selected
-                return;
-
             FileItem item = (FileItem)dataGrid.SelectedItem;
+            item.ConvertToTextComment();
+        }
 
-            // DODELAT; tady musi byt nejaka podminka na convertovani do Statistic; pokud bude Statistic null, musi se vytvorit NOVA INSTANCE,
-            //   a taky pokud nebude zadna vlastnost z FileItem urcena, musi se urcit.
-            // Na toto by asi bylo nejlepsi male okenko, kde by si to uzivatel zvolil; nebo taky ne => vsechen text by se ulozil do Comment a Info
-            //   s SolveTime by zustalo prazdne
-
-            item.LineContent = "Statistic";
+        private void RemoveFileItem(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to remove this line?", "Remove line", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                fileItems.Remove((FileItem)dataGrid.SelectedItem);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-
+            /*ICollectionView dataView = CollectionViewSource.GetDefaultView(dataGrid.ItemsSource);
+            //clear the existing sort order
+            dataView.SortDescriptions.Clear();
+            dataView.Refresh();*/
         }
     }
 }

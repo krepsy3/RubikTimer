@@ -19,10 +19,6 @@ namespace RubikStatEditor
 
             foreach (string line in lines)
             {
-                if (line.Trim().Length == 0) // empty line; skip loop
-                    continue;
-
-                string lineText = "";
                 Statistic statistic = null;
                 string comment = "";
 
@@ -32,15 +28,18 @@ namespace RubikStatEditor
                     string[] data = line.Split('~');
 
                     long timeInTicks = 0;
-                    long.TryParse(data[0].Substring(1), out timeInTicks);
-
-                    statistic = new Statistic(TimeSpan.FromTicks(timeInTicks), (data.Length >= 2) ? data[1] : "");
-                    comment = (data.Length == 3) ? data[2] : "";
+                    if (long.TryParse(data[0].Substring(1), out timeInTicks))
+                    {
+                        statistic = new Statistic(TimeSpan.FromTicks(timeInTicks), (data.Length >= 2) ? data[1] : "");
+                        comment = (data.Length == 3) ? data[2] : "";
+                    }
+                    else
+                        comment = line;
                 }
+                else
+                    comment = line;
 
-                lineText = line;
-
-                fileItems.Add(new FileItem(statistic, comment, lineText));
+                fileItems.Add(new FileItem(statistic, comment));
             }
 
             return fileItems;
