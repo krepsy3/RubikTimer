@@ -174,7 +174,7 @@ namespace RubikTimer
             if (File.Exists(editorname))
             {
                 Process editor = new Process();
-                editor.StartInfo = new ProcessStartInfo(editorname, Path.Combine(DirPath, filename + extension));
+                editor.StartInfo = new ProcessStartInfo(editorname, Path.Combine(DirPath, filename + extension) + " TIMER");
                 editor.Start();
             }
             else result = false;

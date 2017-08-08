@@ -24,7 +24,7 @@ namespace RubikTimer
             "CountDownSecs = ",
             "DoCounting = ",
             "AutoScrambleGenerate = ",
-            "ScrambleSteps = ",
+            "ScrambleLenght = ",
             "PuzzleType = ",
             "UserFolderPath = ",
             "CurrentFileName = "
@@ -36,7 +36,7 @@ namespace RubikTimer
             "15",
             "true",
             "true",
-            "10",
+            "20",
             "2",
             Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"RubikTimer")),
             "rubikstat0"

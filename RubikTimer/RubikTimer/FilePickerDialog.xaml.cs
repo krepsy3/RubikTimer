@@ -38,5 +38,18 @@ namespace RubikTimer
         private void WinMouseDown(object sender, MouseButtonEventArgs e) { filesView.SelectedIndex = -1; }
 
         private void ListMouseDown(object sender, MouseButtonEventArgs e) { e.Handled = true; }
+
+        private void ListMouseDouble(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                DependencyObject dpo = (DependencyObject)e.OriginalSource;
+                while (dpo != null && dpo != filesView)
+                {
+                    if (dpo is ListViewItem) MediaCommands.Select.Execute(null, null);
+                    dpo = VisualTreeHelper.GetParent(dpo);
+                }
+            }
+        }
     }
 }

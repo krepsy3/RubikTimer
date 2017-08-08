@@ -30,6 +30,8 @@ namespace RubikTimer
         private StatsManager statsmanager;
         private ScrambleGenerator gen;
 
+        private bool skipquitconfirmation;
+
         #region Properties
         private SolvePhase _phase;
         private SolvePhase Phase { get { return _phase; } set { _phase = value; UpdateProperty("Phase"); } }
@@ -50,6 +52,7 @@ namespace RubikTimer
             SolveTime = new DateTime(0);
             gen = new ScrambleGenerator();
             statsmanager = new StatsManager(userpath, currentfile);
+            skipquitconfirmation = false;
             InitializeComponent();
 
             TimeBorder.DataContext = timer;
@@ -90,6 +93,7 @@ namespace RubikTimer
                     switch (arg)
                     {
                         case "/edit": CustomCommands.Edit.Execute(null,null); break;
+                        case "/skip": skipquitconfirmation = true; break;
                     }
                 }
             }
@@ -317,7 +321,6 @@ namespace RubikTimer
         private void EditStats(object sender, ExecutedRoutedEventArgs e)
         {
             List<string> files = statsmanager.GetStatisticFiles(false);
-            files.Remove(statsmanager.CurrentFileName);
             FilePickerDialog d = new FilePickerDialog(files,"Pick a file for editing","Please pick a file from the list to be edited:");
             if (!((bool)d.ShowDialog())) return;
             else
@@ -345,11 +348,16 @@ namespace RubikTimer
 
         private void ClosingWindow(object sender, CancelEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to quit?", "Exit confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No) e.Cancel = true;
-            else
+            if (!skipquitconfirmation)
             {
-                SaveConfig();
+                if (MessageBox.Show("Are you sure you want to quit?", "Exit confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
             }
+
+            SaveConfig();
         }
 
         private void SaveConfig()

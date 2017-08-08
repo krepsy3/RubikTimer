@@ -37,11 +37,13 @@ namespace RubikStatEditor
             {
                 fileItems = new ObservableCollection<FileItem>(fileManager.LoadFileItemsFromFile(App.args[0]));
             }
+
             catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException || ex is DirectoryNotFoundException || ex is FileNotFoundException || ex is PathTooLongException)
             {
                 MessageBox.Show("Selected Statistic file path is invalid", "Loading error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show("File opening failed due to following exception: " + ex.Message,"Loading error",MessageBoxButton.OK,MessageBoxImage.Error);
@@ -49,7 +51,12 @@ namespace RubikStatEditor
             }
 
             dataGrid.ItemsSource = fileItems;
-            //dataGrid.ColumnFromDisplayIndex(4).SortMemberPath
+        }
+
+        private void ContRendered(object sender, EventArgs e)
+        {
+            if (App.args.Length > 1 && App.args[1] == "TIMER") return;
+            else MessageBox.Show("Editor launched succesfully. However, you should allways start from the main application RubikTimer.exe to prevent data loss due to using undedicated directories.", "Data loss warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private void ConvertToTextComment(object sender, RoutedEventArgs e)
@@ -64,14 +71,19 @@ namespace RubikStatEditor
                 fileItems.Remove((FileItem)dataGrid.SelectedItem);
         }
 
-        private void btn_AddLine_Click(object sender, RoutedEventArgs e)
+        private void AddLine(object sender, RoutedEventArgs e)
         {
             fileItems.Add(new FileItem(null, ""));
         }
 
         private void SortOriginally(object sender, RoutedEventArgs e)
         {
-
+            ICollectionView view = CollectionViewSource.GetDefaultView(dataGrid.ItemsSource);
+            if (view != null && view.SortDescriptions != null)
+            {
+                view.SortDescriptions.Clear();
+                foreach (DataGridColumn c in dataGrid.Columns) { c.SortDirection = null; }
+            }
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
