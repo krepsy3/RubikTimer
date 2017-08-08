@@ -51,7 +51,6 @@ namespace RubikStatEditor
             }
 
             dataGrid.ItemsSource = fileItems;
-            MouseDown += MouseClick;
         }
 
         private void ContRendered(object sender, EventArgs e)
@@ -112,10 +111,5 @@ namespace RubikStatEditor
             
         }
         #endregion
-
-        private void MouseClick(object sender, MouseButtonEventArgs e)
-        {
-            if(e.ChangedButton == MouseButton.Left) dataGrid.UnselectAllCells();
-        }
     }
 }
