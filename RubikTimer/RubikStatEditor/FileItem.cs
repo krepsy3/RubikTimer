@@ -59,10 +59,15 @@ namespace RubikStatEditor
             {
                 _comment = value;
 
-                if (value.StartsWith("_"))
+                if (value.StartsWith("_") && _lineContent == LineContents.TextComment)
                 {
-                    // converting to InvalidStatisticLine
                     _lineContent = LineContents.InvalidStatisticLine;
+                    UpdateAllProperties();
+                }
+
+                else if (!value.StartsWith("_") && _lineContent == LineContents.InvalidStatisticLine)
+                {
+                    _lineContent = LineContents.TextComment;
                     UpdateAllProperties();
                 }
             }
@@ -88,7 +93,6 @@ namespace RubikStatEditor
             else if (comment.StartsWith("_"))
             {
                 _lineContent = LineContents.InvalidStatisticLine;
-                Comment = Comment.Substring(1); // remove '_' from start of comment
             }
             else
                 _lineContent = LineContents.TextComment;
@@ -96,13 +100,13 @@ namespace RubikStatEditor
 
         private void UpdateAllProperties()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(String.Empty));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
             // String.Empty is doing the trick with updating all properties
         }
 
         public void ConvertToTextComment()
         {
-            Comment = Comment.Remove(0, 1); // remove "_" at position 0 in the string
+            while (Comment.StartsWith("_")) Comment = Comment.Substring(1);
             _lineContent = LineContents.TextComment;
             UpdateAllProperties();
         }

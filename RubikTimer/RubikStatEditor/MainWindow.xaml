@@ -78,7 +78,7 @@
                 <MenuItem Header="About"/>
             </MenuItem>
         </Menu>
-        <ScrollViewer VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+        <ScrollViewer VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
