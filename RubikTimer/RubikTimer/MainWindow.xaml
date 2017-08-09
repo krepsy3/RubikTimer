@@ -22,7 +22,7 @@
         <Menu DockPanel.Dock="Top" Padding="10,0">
             <MenuItem Header="File">
                 <MenuItem Header="Create new statistic file" Command="ApplicationCommands.New" />
-                <MenuItem Header="Select statistic file" Command="ApplicationCommands.Open" />
+                <MenuItem Header="Select another statistic file" Command="ApplicationCommands.Open" />
                 <MenuItem Header="Change User data Folder" Command="ApplicationCommands.Replace" />
                 <MenuItem Header="Edit statistic file" Command="local:CustomCommands.Edit" />
                 <MenuItem Header="Exit" Command="local:CustomCommands.Exit" />

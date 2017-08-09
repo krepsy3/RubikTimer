@@ -16,8 +16,8 @@ namespace RubikTimer
         #region properties
         private string _dirpath;
         public string DirPath { get { return _dirpath; } private set { _dirpath = value; UpdateProperty("DirPath"); } }
-        private readonly string extension = ".stxt";
-        private readonly string editorname = "RubikStatEditor.exe";
+        public readonly string extension = ".stxt";
+        public readonly string editorname = "RubikStatEditor.exe";
         public string CurrentFileName { get; private set; }
         private string CurrentFile { get { return Path.Combine(DirPath, CurrentFileName + extension); } }
 
@@ -99,7 +99,7 @@ namespace RubikTimer
             {
                 if (line.StartsWith("_"))
                 {
-                    if ((+index) > Stats.Count)
+                    if (index < Stats.Count)
                     {
                         string[] temp = line.Split('~');
                         string comment = "";
@@ -134,9 +134,12 @@ namespace RubikTimer
 
         public void ChangeCurrentFile(string filename)
         {
-            SaveCurrentFile();
-            CurrentFileName = filename;
-            LoadCurrentFile();
+            if (filename != CurrentFileName)
+            {
+                SaveCurrentFile();
+                CurrentFileName = filename;
+                LoadCurrentFile();
+            }
         }
 
         public bool CreateCurrentFile(string filename, bool overwrite)
@@ -151,6 +154,8 @@ namespace RubikTimer
 
         public void ChangeUserDirectory(string newpath)
         {
+            SaveCurrentFile();
+
             foreach(string file in Directory.GetFiles(DirPath,"*",SearchOption.TopDirectoryOnly))
             {
                 File.Move(file, Path.Combine(newpath, (new FileInfo(file).Name)));
@@ -162,6 +167,8 @@ namespace RubikTimer
             }
 
             DirPath = newpath;
+
+            LoadCurrentFile();
         }
 
         public List<string> GetStatisticFiles(bool getfullpath)

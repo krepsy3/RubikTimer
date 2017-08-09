@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Height ="160" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Icon="resources/file.ico" >    
     <DockPanel>
-        <TextBlock Name="messageTextBlock" DockPanel.Dock="Top" Margin="10" />
+        <TextBlock Name="messageTextBlock" DockPanel.Dock="Top" Margin="10" TextWrapping="Wrap" />
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button Content="OK" Margin="10" Click="ExitOK" MinWidth="50" />
             <Button Content="Cancel" Margin="10" Click="Exit" MinWidth="50" />

@@ -314,7 +314,33 @@ namespace RubikTimer
         private void CreateFile(object sender, ExecutedRoutedEventArgs e) { }
 
         private void CanOpenFile(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
-        private void OpenFile(object sender, ExecutedRoutedEventArgs e) { }
+        private void OpenFile(object sender, ExecutedRoutedEventArgs e)
+        {
+            List<string> files = statsmanager.GetStatisticFiles(false);
+            files.Remove(statsmanager.CurrentFileName);
+            files = new List<string>(files);
+
+            if (files.Count > 0)
+            {
+                FilePickerDialog d = new FilePickerDialog(files, "Pick another statistic file", "Please pick a file from the list to select it as the current statistic file:");
+                if (!((bool)d.ShowDialog())) return;
+                else
+                {
+                    try
+                    {
+                        statsmanager.ChangeCurrentFile(d.SelectedFile);
+                        MessageBox.Show("Succesfully changed current statistic file to " + d.SelectedFile + statsmanager.extension, "Statistic File swap succesful", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Changing the Statistic file failed due to following Exception: " + ex.Message, "Statistic File swap Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+
+            else MessageBox.Show("There is no Statistic file to be changed to, please select Create new statistic file (Ctrl + N) to create one.", "Can't swap to another Statistic file", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
 
         private void CanChangeFolder(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void ChangeFolder(object sender, ExecutedRoutedEventArgs e)
@@ -329,6 +355,7 @@ namespace RubikTimer
                 try
                 {
                     statsmanager.ChangeUserDirectory(fbd.SelectedPath);
+                    MessageBox.Show("Succesfully changed User data folder to: " + fbd.SelectedPath, "User data folder change Succesful", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
                 catch (Exception ex)
@@ -353,7 +380,7 @@ namespace RubikTimer
             {
                 try
                 {
-                    if (!statsmanager.LaunchEditor(files[d.SelectedIndex])) MessageBox.Show("RubikStatEditor.exe file seems to be missing. Try reinstalling the program.", "Editor failed to launch", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (!statsmanager.LaunchEditor(d.SelectedFile)) MessageBox.Show("RubikStatEditor.exe file seems to be missing. Try reinstalling the program.", "Editor failed to launch", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch (Exception ex)
                 {
