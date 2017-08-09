@@ -51,6 +51,7 @@ namespace RubikStatEditor
             }
 
             dataGrid.ItemsSource = fileItems;
+            Title = (new FileInfo(App.args[0])).Name + " - RubikTimer Satistic files Editor";
         }
 
         private void ContRendered(object sender, EventArgs e)

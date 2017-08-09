@@ -56,24 +56,33 @@ namespace RubikTimer
         private bool LoadCurrentFile()
         {
             bool result = true;
-            Stats = new List<Statistic>();
-
-            try
+            if (Directory.Exists(DirPath))
             {
-                string[] temp = File.ReadAllLines(CurrentFile);
-                foreach (string s in temp)
+                Stats = new List<Statistic>();
+
+                try
                 {
-                    if (s.StartsWith("_"))
+                    string[] temp = File.ReadAllLines(CurrentFile);
+                    foreach (string s in temp)
                     {
-                        string[] stat = s.Split('~');
-                        long time = 0;
-                        if (long.TryParse(stat[0].Remove(0, 1).Trim(), out time)) Stats.Add(new Statistic(new TimeSpan(time), stat.Length >= 2 ? stat[1] : ""));
+                        if (s.StartsWith("_"))
+                        {
+                            string[] stat = s.Split('~');
+                            long time = 0;
+                            if (long.TryParse(stat[0].Remove(0, 1).Trim(), out time)) Stats.Add(new Statistic(new TimeSpan(time), stat.Length >= 2 ? stat[1] : ""));
+                        }
                     }
+                }
+
+                catch
+                {
+                    result = false;
                 }
             }
 
-            catch
+            else
             {
+                Directory.CreateDirectory(DirPath);
                 result = false;
             }
 
@@ -142,7 +151,16 @@ namespace RubikTimer
 
         public void ChangeUserDirectory(string newpath)
         {
-            Directory.Move(DirPath, newpath);
+            foreach(string file in Directory.GetFiles(DirPath,"*",SearchOption.TopDirectoryOnly))
+            {
+                File.Move(file, Path.Combine(newpath, (new FileInfo(file).Name)));
+            }
+
+            if (Directory.GetDirectories(DirPath, "*", SearchOption.AllDirectories).Length == 0 && Directory.GetFiles(DirPath, "*", SearchOption.AllDirectories).Length == 0)
+            {
+                Directory.Delete(DirPath);
+            }
+
             DirPath = newpath;
         }
 
@@ -156,8 +174,7 @@ namespace RubikTimer
                 string cleanfile = file;
                 if(!getfullpath)
                 {
-                    cleanfile = cleanfile.Substring(DirPath.Length);
-                    if (cleanfile.StartsWith("\\")) cleanfile = cleanfile.Substring(1);
+                    cleanfile = (new FileInfo(file)).Name;
                     cleanfile = cleanfile.Remove(cleanfile.Length - extension.Length);
                 }
 

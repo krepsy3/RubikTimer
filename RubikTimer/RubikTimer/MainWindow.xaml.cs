@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Microsoft.Win32;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
+using WFDialogResult = System.Windows.Forms.DialogResult;
 
 namespace RubikTimer
 {
@@ -71,7 +72,9 @@ namespace RubikTimer
             InspectionSeconds = countdownsecs;
             ScrambleLenghtTextBox.Text = gensteps.ToString();
             Type = type;
+            Title = "RubikTimer - Professional offline speedcubing timer";
             Phase = SolvePhase.Scramble;
+
             foreach (string t in ScrambleGenerator.Type)
             {
                 MenuItem m = new MenuItem();
@@ -79,7 +82,6 @@ namespace RubikTimer
                 m.IsCheckable = true;
                 PuzzleSelectMenuItem.Items.Add(m);
             }
-
             ((MenuItem)PuzzleSelectMenuItem.Items[Type]).IsChecked = true;
         }
 
@@ -315,7 +317,31 @@ namespace RubikTimer
         private void OpenFile(object sender, ExecutedRoutedEventArgs e) { }
 
         private void CanChangeFolder(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
-        private void ChangeFolder(object sender, ExecutedRoutedEventArgs e) { }
+        private void ChangeFolder(object sender, ExecutedRoutedEventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = "Please select the new folder for the user data";
+            fbd.RootFolder = Environment.SpecialFolder.MyDocuments;
+            fbd.ShowNewFolderButton = true;
+
+            if(fbd.ShowDialog() == WFDialogResult.OK) 
+            {
+                try
+                {
+                    statsmanager.ChangeUserDirectory(fbd.SelectedPath);
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Changing the User data folder failed due to following exception: " + ex.Message, "User data folder change Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                finally
+                {
+                    SaveConfig();
+                }
+            }
+        }
 
         private void CanEdit(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void EditStats(object sender, ExecutedRoutedEventArgs e)
