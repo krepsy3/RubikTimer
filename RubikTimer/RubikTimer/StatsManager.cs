@@ -148,6 +148,7 @@ namespace RubikTimer
             else
             {
                 File.Create(Path.Combine(DirPath, filename + extension));
+                ChangeCurrentFile(filename);
                 return true;
             }
         }

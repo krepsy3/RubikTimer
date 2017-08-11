@@ -14,9 +14,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using Microsoft.Win32;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using WFDialogResult = System.Windows.Forms.DialogResult;
+using System.Diagnostics;
 
 namespace RubikTimer
 {
@@ -82,7 +82,8 @@ namespace RubikTimer
                 m.IsCheckable = true;
                 PuzzleSelectMenuItem.Items.Add(m);
             }
-            ((MenuItem)PuzzleSelectMenuItem.Items[Type]).IsChecked = true;
+
+            MediaCommands.Select.Execute(null, null);
         }
 
         private void WinContRendered(object sender, EventArgs e)
@@ -240,6 +241,11 @@ namespace RubikTimer
                             InspectionBorder.BorderThickness = new Thickness(0);
                             TimerBorder.BorderThickness = new Thickness(0);
                             SolvedBorder.BorderThickness = new Thickness(1);
+                            statsmanager.Stats.Add(new Statistic(
+                                timer.Timeproperty,
+                                "Date: " + DateTime.Now.ToString(@"{}{0:d\.M\.yyyy}") +
+                                "Puzzle: " + ScrambleGenerator.Type[Type] +
+                                (AutoScramble ? ("Scramble: " + Scramble) : "")));
                             break;
                         }
                 }
@@ -293,7 +299,7 @@ namespace RubikTimer
         }
 
         #region Commands
-        private void CanSelectPuzzle(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
+        private void CanSelectPuzzle(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = Phase == SolvePhase.Scramble; }
         private void SelectPuzzle(object sender, ExecutedRoutedEventArgs e)
         {
             foreach (MenuItem m in PuzzleSelectMenuItem.Items)
@@ -311,7 +317,53 @@ namespace RubikTimer
         }
 
         private void CanCreateFile(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
-        private void CreateFile(object sender, ExecutedRoutedEventArgs e) { }
+        private void CreateFile(object sender, ExecutedRoutedEventArgs e)
+        {
+            string filename = "rubikstat";
+            int filenamenum = 0;
+            foreach (string file in statsmanager.GetStatisticFiles(false))
+            {
+                if (file.StartsWith(filename))
+                {
+                    string s = file.Substring(filename.Length);
+                    int i;
+                    int.TryParse(s, out i);
+                    if (i > filenamenum) filenamenum = i;
+                }
+            }
+            filenamenum++;
+
+            FileNameDialog d = new FileNameDialog(filename + filenamenum,"Pick a name","Please pick a name for the new Statistic file:");
+
+            FileNamePick:
+            if (!((bool)d.ShowDialog())) return;
+            else
+            {
+                try
+                {
+                    if (!statsmanager.CreateCurrentFile(d.FileName, false))
+                    {
+                        switch (MessageBox.Show("There already exists a file called " + d.FileName + ". Do you wish to overwrite it?", "File already exists", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.No))
+                        {
+                            case MessageBoxResult.Yes: statsmanager.CreateCurrentFile(d.FileName, true); break;
+                            case MessageBoxResult.Cancel: case MessageBoxResult.None: return;
+                            case MessageBoxResult.No:
+                                {
+                                    d = new FileNameDialog(d.FileName, "Pick another name", "Please pick another name for the new Statistic file:");
+                                    goto FileNamePick;
+                                }
+                        }
+                    }
+
+                    MessageBox.Show("Successfully created and selected a new Statistic file " + d.FileName + statsmanager.extension, "File creation successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Creation of the new file failed due to the following exception: " + ex.Message, "File creation error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            } 
+        }
 
         private void CanOpenFile(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void OpenFile(object sender, ExecutedRoutedEventArgs e)
@@ -339,7 +391,7 @@ namespace RubikTimer
                 }
             }
 
-            else MessageBox.Show("There is no Statistic file to be changed to, please select Create new statistic file (Ctrl + N) to create one.", "Can't swap to another Statistic file", MessageBoxButton.OK, MessageBoxImage.Warning);
+            else MessageBox.Show("There is no Statistic file to be changed to, please select Create new statistic file (Ctrl + N) to create one.", "No Statistic file to swap to", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private void CanChangeFolder(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
@@ -388,6 +440,9 @@ namespace RubikTimer
                 }
             }
         }
+
+        private void CanOpenFolder(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        private void OpenFolder(object sender, ExecutedRoutedEventArgs e) { Process.Start(statsmanager.DirPath); }
 
         private void CanHelp(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
         private void DisplayHelp(object sender, ExecutedRoutedEventArgs e) { }
