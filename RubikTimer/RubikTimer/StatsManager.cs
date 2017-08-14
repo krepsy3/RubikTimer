@@ -37,7 +37,10 @@ namespace RubikTimer
         }
         #endregion
         #region statproperties
-        private string[] statproperties = new string[] { "Best", "Worst", "Average", "Median" };
+        private string[] statproperties = new string[] { "Last", "Best", "Worst", "Average", "Median", "AverageLastFive", "AverageLastTen", "AverageLastThreeOfFive", "AverageLastTenOfTwelve" };
+
+        public Statistic Last { get { return Stats[-Stats.Count]; } }
+
         public TimeSpan Best
         {
             get
@@ -62,9 +65,9 @@ namespace RubikTimer
         {
             get
             {
-                TimeSpan result = new TimeSpan();
-                Stats.ForEach(s => result = result.Add(s.SolveTime));
-                return new TimeSpan(result.Ticks / Stats.Count);
+                long result = 0;
+                Stats.ForEach(s => result += s.SolveTime.Ticks);
+                return new TimeSpan(result / Stats.Count);
             }
         }
 
@@ -79,7 +82,53 @@ namespace RubikTimer
             }
         }
 
+        public TimeSpan AverageLastFive
+        {
+            get
+            {
+                long result = 0;
+                for (int i = Stats.Count - 5; i < Stats.Count; i++) result += Stats[i].SolveTime.Ticks;
+                return new TimeSpan(result / 5);
+            }
+        }
 
+        public TimeSpan AverageLastTen
+        {
+            get
+            {
+                long result = 0;
+                for (int i = Stats.Count - 10; i < Stats.Count; i++) result += Stats[i].SolveTime.Ticks;
+                return new TimeSpan(result / 10);
+            }
+        }
+
+        public TimeSpan AverageLastThreeOfFive
+        {
+            get
+            {
+                List<Statistic> temp = new List<Statistic>();
+                for (int i = Stats.Count - 5; i < Stats.Count; i++) temp.Add(Stats[i]);
+                temp.RemoveAt(4);
+                temp.RemoveAt(0);
+                long result = 0;
+                temp.ForEach((s) => result += s.SolveTime.Ticks);
+                return new TimeSpan(result / 3);
+            }
+        }
+
+        public TimeSpan AverageLastTenOfTwelve
+        {
+            get
+            {
+                List<Statistic> temp = new List<Statistic>();
+                for (int i = Stats.Count - 12; i < Stats.Count; i++) temp.Add(Stats[i]);
+                temp.RemoveAt(11);
+                temp.RemoveAt(0);
+                long result = 0;
+                temp.ForEach((s) => result += s.SolveTime.Ticks);
+                return new TimeSpan(result / 10);
+            }
+        }
         #endregion
 
         public StatsManager(string dirpath, string currentfilename)
