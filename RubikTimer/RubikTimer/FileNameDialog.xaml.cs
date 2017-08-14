@@ -19,7 +19,7 @@ namespace RubikTimer
     public partial class FileNameDialog : Window
     {
         public string FileName { get { return inputTextBox.Text; } }
-        public FileNameDialog(string defaultname = "", string title = "Name Pick", string message = "Please select a name for the file:")
+        public FileNameDialog(string defaultname, string title, string message)
         {
             InitializeComponent();
             Title = title;

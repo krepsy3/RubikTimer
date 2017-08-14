@@ -21,7 +21,7 @@ namespace RubikTimer
         public ObservableCollection<string> Files { get; private set; }
         public string SelectedFile { get { return filesView != null ? Files[filesView.SelectedIndex] : ""; } }
 
-        public FilePickerDialog(List<string> files, string title = "File Pick", string message = "Please pick a file from the list:")
+        public FilePickerDialog(List<string> files, string title, string message)
         {
             Files = new ObservableCollection<string>(files);
             InitializeComponent();

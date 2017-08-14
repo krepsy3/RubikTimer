@@ -59,7 +59,8 @@ namespace RubikTimer
             TimeBorder.DataContext = timer;
             PhaseStackPanel.DataContext = this;
             ScrambleGrid.DataContext = this;
-            StatsStackPanel.DataContext = statsmanager;
+            StatsStackPanel1.DataContext = statsmanager;
+            StatsStackPanel2.DataContext = statsmanager;
 
             PropertyChanged += UpdatePhase;
             timer.PropertyChanged += TimerPropertyUpdate;
@@ -74,6 +75,7 @@ namespace RubikTimer
             Type = type;
             Title = "RubikTimer - Professional offline speedcubing timer";
             Phase = SolvePhase.Scramble;
+            Scramble = "";
 
             foreach (string t in ScrambleGenerator.Type)
             {
@@ -91,15 +93,74 @@ namespace RubikTimer
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
+                bool pathhandled = false;
+
                 foreach(string arg in args)
                 {
                     switch (arg)
                     {
                         case "/edit": CustomCommands.Edit.Execute(null,null); break;
                         case "/skip": skipquitconfirmation = true; break;
+                        default:
+                            {
+                                #region openfile
+                                if (File.Exists(arg) && !pathhandled)
+                                {
+                                    if (new FileInfo(arg).Extension == statsmanager.extension && arg.StartsWith(statsmanager.DirPath))
+                                    {
+                                        pathhandled = true;
+                                        string filename = (new FileInfo(arg).Name);
+                                        filename = filename.Remove(filename.Length - statsmanager.extension.Length);
+
+                                        OptionPickerDialog opd = new OptionPickerDialog("File opened", "You have opened a statistic file " + filename + statsmanager.extension + ". Please Choose what to do:", 1, "Select the it as a current statistic file", "Edit it", "Nothing");
+                                        if ((bool)opd.ShowDialog())
+                                        {
+                                            switch (opd.SelectedIndex)
+                                            {
+                                                case 0:
+                                                    {
+                                                        try
+                                                        {
+                                                            statsmanager.ChangeCurrentFile(filename);
+                                                            MessageBox.Show("Succesfully changed current statistic file to " + filename + statsmanager.extension, "Statistic File swap succesful", MessageBoxButton.OK, MessageBoxImage.Information);
+                                                        }
+
+                                                        catch (Exception ex)
+                                                        {
+                                                            MessageBox.Show("Changing the Statistic file failed due to following Exception: " + ex.Message, "Statistic File swap Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                        }
+
+                                                        break;
+                                                    }
+
+                                                case 1:
+                                                    {
+                                                        try
+                                                        {
+                                                            if (!statsmanager.LaunchEditor(filename)) MessageBox.Show("RubikStatEditor.exe file seems to be missing. Try reinstalling the program.", "Editor failed to launch", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            MessageBox.Show("Editor failed to launch due to following exception: " + ex.Message, "Launch failure", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                        }
+
+                                                        break;
+                                                    }
+
+                                                case 2: break;
+                                            }
+                                        }
+                                    }
+                                }
+                                #endregion
+
+                                break;
+                            }
                     }
                 }
             }
+
+            if (AutoScramble) CustomCommands.Generate.Execute(null, null);
         }
 
         private void KeyPress(object sender, KeyEventArgs e)
@@ -202,7 +263,7 @@ namespace RubikTimer
             }
         }
 
-        private void MouseClick(object sender, MouseButtonEventArgs e) { if (e.ChangedButton == MouseButton.Left) { Keyboard.ClearFocus(); FocusManager.SetFocusedElement(this, this); } }
+        private void MouseClick(object sender, MouseButtonEventArgs e) { if (e.ChangedButton == MouseButton.Left) { Keyboard.ClearFocus(); FocusManager.SetFocusedElement(this, this); Focus(); } }
 
         private void UpdatePhase(object sender, PropertyChangedEventArgs e)
         {
@@ -216,7 +277,7 @@ namespace RubikTimer
                             InspectionBorder.BorderThickness = new Thickness(0);
                             TimerBorder.BorderThickness = new Thickness(0);
                             SolvedBorder.BorderThickness = new Thickness(0);
-                            if (AutoScramble) GenerateScramble(this, new RoutedEventArgs());
+                            if (AutoScramble) CustomCommands.Generate.Execute(null, null);
                             break;
                         }
                     case SolvePhase.Inspection:
@@ -243,19 +304,13 @@ namespace RubikTimer
                             SolvedBorder.BorderThickness = new Thickness(1);
                             statsmanager.Stats.Add(new Statistic(
                                 timer.Timeproperty,
-                                "Date: " + DateTime.Now.ToString(@"{}{0:d\.M\.yyyy}") +
-                                "Puzzle: " + ScrambleGenerator.Type[Type] +
-                                (AutoScramble ? ("Scramble: " + Scramble) : "")));
+                                "Date: " + DateTime.Now.ToString(@"0:d\.M\.yyyy") +
+                                " Puzzle: " + ScrambleGenerator.Type[Type] +
+                                ((AutoScramble && Scramble.Length > 0) ? (" Scramble: " + Scramble) : "")));
                             break;
                         }
                 }
             }
-        }
-
-        private void GenerateScramble(object sender, RoutedEventArgs e)
-        {
-            if (ScrambleLenghtTextBox.Text.Length > 0)
-                Scramble = gen.Generate(Type, byte.Parse(ScrambleLenghtTextBox.Text));
         }
 
         private void ByteTextBoxCheck(object sender, TextChangedEventArgs e)
@@ -299,7 +354,10 @@ namespace RubikTimer
         }
 
         #region Commands
-        private void CanSelectPuzzle(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = Phase == SolvePhase.Scramble; }
+        private void CanCmdTrue(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        private void CanCmdNoSolve(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.Scramble || Phase == SolvePhase.End); }
+        private void CanCmdOnStart(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = Phase == SolvePhase.Scramble; }
+
         private void SelectPuzzle(object sender, ExecutedRoutedEventArgs e)
         {
             foreach (MenuItem m in PuzzleSelectMenuItem.Items)
@@ -316,7 +374,6 @@ namespace RubikTimer
             }
         }
 
-        private void CanCreateFile(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void CreateFile(object sender, ExecutedRoutedEventArgs e)
         {
             string filename = "rubikstat";
@@ -365,7 +422,6 @@ namespace RubikTimer
             } 
         }
 
-        private void CanOpenFile(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void OpenFile(object sender, ExecutedRoutedEventArgs e)
         {
             List<string> files = statsmanager.GetStatisticFiles(false);
@@ -394,7 +450,6 @@ namespace RubikTimer
             else MessageBox.Show("There is no Statistic file to be changed to, please select Create new statistic file (Ctrl + N) to create one.", "No Statistic file to swap to", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
-        private void CanChangeFolder(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void ChangeFolder(object sender, ExecutedRoutedEventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -422,9 +477,10 @@ namespace RubikTimer
             }
         }
 
-        private void CanEdit(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void EditStats(object sender, ExecutedRoutedEventArgs e)
         {
+            statsmanager.SaveCurrentFile();
+
             List<string> files = statsmanager.GetStatisticFiles(false);
             FilePickerDialog d = new FilePickerDialog(files,"Pick a file for editing","Please pick a file from the list to be edited:");
             if (!((bool)d.ShowDialog())) return;
@@ -440,18 +496,23 @@ namespace RubikTimer
                 }
             }
         }
-
-        private void CanOpenFolder(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        
         private void OpenFolder(object sender, ExecutedRoutedEventArgs e) { Process.Start(statsmanager.DirPath); }
-
-        private void CanHelp(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        
         private void DisplayHelp(object sender, ExecutedRoutedEventArgs e) { }
-
-        private void CanAbout(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        
         private void DisplayAbout(object sender, ExecutedRoutedEventArgs e) { }
 
-        private void CanExit(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.End || Phase == SolvePhase.Scramble); }
         private void Exit(object sender, ExecutedRoutedEventArgs e) { Close(); }
+
+        private void GenerateScramble(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (ScrambleLenghtTextBox.Text.Length > 0)
+                Scramble = gen.Generate(Type, byte.Parse(ScrambleLenghtTextBox.Text));
+        }
+
+        private void DeleteLastStat(object sender, ExecutedRoutedEventArgs e) { }
+
         #endregion
 
         private void ClosingWindow(object sender, CancelEventArgs e)
@@ -463,6 +524,16 @@ namespace RubikTimer
                     e.Cancel = true;
                     return;
                 }
+            }
+
+            try
+            {
+                statsmanager.SaveCurrentFile();
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("Saving the current Statistic file failed due to the following exception: " + ex.Message, "Statistic file save error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             SaveConfig();

@@ -17,14 +17,13 @@ namespace RubikTimer
         private string _dirpath;
         public string DirPath { get { return _dirpath; } private set { _dirpath = value; UpdateProperty("DirPath"); } }
         public readonly string extension = ".stxt";
-        public readonly string editorname = "RubikStatEditor.exe";
+        public readonly string editorname = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RubikStatEditor.exe");
         public string CurrentFileName { get; private set; }
         private string CurrentFile { get { return Path.Combine(DirPath, CurrentFileName + extension); } }
 
         private bool _statfileloaded;
         public bool StatFileLoaded { get { return _statfileloaded; } set { _statfileloaded = value; UpdateProperty("StatFileLoaded"); } }
-        #endregion
-        #region statproperties
+
         private List<Statistic> _stats;
         public List<Statistic> Stats
         {
@@ -33,14 +32,54 @@ namespace RubikTimer
             {
                 _stats = value;
                 UpdateProperty("Stats");
-                UpdateProperty("Best");
-                UpdateProperty("Worst");
-                UpdateProperty("Median");
+                foreach (string statproperty in statproperties) UpdateProperty(statproperty);
             }
         }
-        public Statistic Best { get { Statistic b = Stats[0]; Stats.ForEach(s => { if (s < b) b = s; }); return b; } }
-        public Statistic Worst { get { Statistic w = Stats[0]; Stats.ForEach(s => { if (s > w) w = s; }); return w; } }
-        public Statistic Median { get { List <Statistic> temp = new List<Statistic>(Stats); temp.Sort(); if (temp.Count % 2 == 1) return temp[(temp.Count - 1) / 2]; else return (temp[(temp.Count / 2) - 1] + temp[temp.Count / 2]) / 2; } }
+        #endregion
+        #region statproperties
+        private string[] statproperties = new string[] { "Best", "Worst", "Average", "Median" };
+        public TimeSpan Best
+        {
+            get
+            {
+                Statistic b = Stats[0];
+                Stats.ForEach(s => { if (s < b) b = s; });
+                return b.SolveTime;
+            }
+        }
+
+        public TimeSpan Worst
+        {
+            get
+            {
+                Statistic w = Stats[0];
+                Stats.ForEach(s => { if (s > w) w = s; });
+                return w.SolveTime;
+            }
+        }
+
+        public TimeSpan Average
+        {
+            get
+            {
+                TimeSpan result = new TimeSpan();
+                Stats.ForEach(s => result = result.Add(s.SolveTime));
+                return new TimeSpan(result.Ticks / Stats.Count);
+            }
+        }
+
+        public TimeSpan Median
+        {
+            get
+            {
+                List <Statistic> temp = new List<Statistic>(Stats);
+                temp.Sort();
+                if (temp.Count % 2 == 1) return temp[(temp.Count - 1) / 2].SolveTime;
+                else return ((temp[(temp.Count / 2) - 1] + temp[temp.Count / 2]) / 2).SolveTime;
+            }
+        }
+
+
         #endregion
 
         public StatsManager(string dirpath, string currentfilename)
@@ -56,10 +95,10 @@ namespace RubikTimer
         private bool LoadCurrentFile()
         {
             bool result = true;
+            Stats = new List<Statistic>();
+
             if (Directory.Exists(DirPath))
             {
-                Stats = new List<Statistic>();
-
                 try
                 {
                     string[] temp = File.ReadAllLines(CurrentFile);
@@ -91,45 +130,48 @@ namespace RubikTimer
 
         public void SaveCurrentFile()
         {
-            string[] lines = File.ReadAllLines(CurrentFile);
-            List<string> newlines = new List<string>();
-            int index = 0;
-
-            foreach (string line in lines)
+            if (File.Exists(CurrentFile))
             {
-                if (line.StartsWith("_"))
-                {
-                    if (index < Stats.Count)
-                    {
-                        string[] temp = line.Split('~');
-                        string comment = "";
-                        if (temp.Length >= 3)
-                        {
-                            for (int i = 2; i < temp.Length; i++)
-                            {
-                                comment += "~";
-                                comment += temp[i];
-                            }
-                        }
+                string[] lines = File.ReadAllLines(CurrentFile);
+                List<string> newlines = new List<string>();
+                int index = 0;
 
-                        newlines.Add("_" + Stats[index].SolveTime.Ticks.ToString() + "~" + Stats[index].Info + comment);
+                foreach (string line in lines)
+                {
+                    if (line.StartsWith("_"))
+                    {
+                        if (index < Stats.Count)
+                        {
+                            string[] temp = line.Split('~');
+                            string comment = "";
+                            if (temp.Length >= 3)
+                            {
+                                for (int i = 2; i < temp.Length; i++)
+                                {
+                                    comment += "~";
+                                    comment += temp[i];
+                                }
+                            }
+
+                            newlines.Add("_" + Stats[index].SolveTime.Ticks.ToString() + "~" + Stats[index].Info + comment);
+                        }
+                        index++;
                     }
+
+                    else
+                    {
+                        newlines.Add(line);
+                    }
+                }
+
+                while (index < Stats.Count)
+                {
+                    newlines.Add("_" + Stats[index].SolveTime.Ticks.ToString() + "~" + Stats[index].Info);
                     index++;
                 }
 
-                else
-                {
-                    newlines.Add(line);
-                }
+                File.WriteAllLines(CurrentFile, newlines);
             }
-
-            while(index < Stats.Count)
-            {
-                newlines.Add("_" + Stats[index].SolveTime.Ticks.ToString() + "~" + Stats[index].Info);
-                index++;
-            }
-
-            File.WriteAllLines(CurrentFile, newlines);
         }
 
         public void ChangeCurrentFile(string filename)

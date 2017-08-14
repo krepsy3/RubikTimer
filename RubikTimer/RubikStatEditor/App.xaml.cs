@@ -26,7 +26,7 @@ namespace RubikStatEditor
                 if (MessageBox.Show("To edit statistic files, please open the main app (RubikTimer.exe) and select Edit Statistic Files. Do you wish to launch it now?","Fatal error",MessageBoxButton.YesNo,MessageBoxImage.Error,MessageBoxResult.Yes) == MessageBoxResult.Yes)
                 {
                     Process p = new Process();
-                    p.StartInfo = new ProcessStartInfo("RubikTimer.exe","/edit /skip");
+                    p.StartInfo = new ProcessStartInfo("RubikTimer.exe","/edit");
                     p.Start();
                 }
                 Shutdown();
