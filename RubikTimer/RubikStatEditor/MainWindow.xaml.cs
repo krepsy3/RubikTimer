@@ -16,6 +16,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Microsoft.Win32;
+
 namespace RubikStatEditor
 {
     /// <summary>
@@ -23,6 +25,8 @@ namespace RubikStatEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool saved = true;
+
         private FileManager fileManager;
 
         private ObservableCollection<FileItem> fileItems;
@@ -56,25 +60,32 @@ namespace RubikStatEditor
 
         private void ContRendered(object sender, EventArgs e)
         {
-            if (App.args.Length > 1 && App.args[1] == "TIMER") return;
-            else MessageBox.Show("Editor launched succesfully. However, you should allways start from the main application RubikTimer.exe to prevent data loss due to using undedicated directories.", "Data loss warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (App.args.Length > 1 && App.args[1] == "TIMER")
+                return;
+            else
+                MessageBox.Show("Editor launched succesfully. However, you should allways start from the main application RubikTimer.exe to prevent data loss due to using undedicated directories.", "Data loss warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private void ConvertToTextComment(object sender, RoutedEventArgs e)
         {
             FileItem item = (FileItem)dataGrid.SelectedItem;
             item.ConvertToTextComment();
+            saved = false;
         }
 
         private void RemoveFileItem(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to remove this line?", "Remove line confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
                 fileItems.Remove((FileItem)dataGrid.SelectedItem);
+                saved = false;
+            }
         }
 
         private void AddLine(object sender, RoutedEventArgs e)
         {
             fileItems.Add(new FileItem(null, ""));
+            saved = false;
         }
 
         private void SortOriginally(object sender, RoutedEventArgs e)
@@ -98,19 +109,34 @@ namespace RubikStatEditor
         private void SaveFile(object sender, RoutedEventArgs e)
         {
             fileManager.SaveFileItems(new List<FileItem>(fileItems));
+            saved = true;
         }
 
         private void SaveFileAs(object sender, RoutedEventArgs e)
         {
-            /*Open
+            /*Open*/
 
-            fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), path);*/
+            /*SaveFileDialog dialog = new SaveFileDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                /////////////////// tady jsi to chtel mit nejak jinak.....
+            }*/
+            fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"RubikTimer\test.stxt"));
+            saved = true;
         }
 
         private void Exit(object sender, RoutedEventArgs e)
         {
-            
+            Close();
         }
         #endregion
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            if (!saved && MessageBox.Show("Do you want to exit without save?", "Exit", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }

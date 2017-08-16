@@ -51,12 +51,41 @@ namespace RubikStatEditor
 
         public void SaveFileItems(List<FileItem> fileItems)
         {
-
+            Save(fileItems, filePath);
         }
 
         public void SaveFileItemsToFile(List<FileItem> fileItems, string path)
         {
+            Save(fileItems, path);
+        }
 
+        private void Save(List<FileItem> fileItems, string path)
+        {
+            List<string> lines = new List<string>();
+
+            foreach (FileItem item in fileItems)
+            {
+                string line = "";
+
+                if (item.ItemContent == FileItem.LineContents.Statistic)
+                {
+                    line = "_" + item.Statistic.SolveTime.Ticks;
+                    line += (item.Info.Length > 0) ? "~" + item.Info : (item.Comment.Length > 0) ? "~" : "";
+                    line += (item.Comment.Length > 0) ? "~" + item.Comment : "";
+                }
+                else if (item.ItemContent == FileItem.LineContents.TextComment)
+                {
+                    line = item.Comment;
+                }
+                else
+                {
+                    line = "_" + item.Comment;
+                }
+
+                lines.Add(line);
+            }
+
+            File.WriteAllLines(path, lines);
         }
     }
 }

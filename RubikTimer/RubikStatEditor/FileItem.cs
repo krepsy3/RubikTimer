@@ -14,9 +14,8 @@ namespace RubikStatEditor
     {
         private Statistic statistic;
         private LineContents _lineContent;
-        private string _comment;
 
-        enum LineContents { Statistic, TextComment, InvalidStatisticLine }
+        public enum LineContents { Statistic, TextComment, InvalidStatisticLine }
         private readonly string[] lineContentsRep = new string[] { "Statistic", "Text Comment", "Invalid Statistic Line"};
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -49,29 +48,7 @@ namespace RubikStatEditor
             }
         }
 
-        public string Comment
-        {
-            get
-            {
-                return _comment;
-            }
-            set
-            {
-                _comment = value;
-
-                if (value.StartsWith("_") && _lineContent == LineContents.TextComment)
-                {
-                    _lineContent = LineContents.InvalidStatisticLine;
-                    UpdateAllProperties();
-                }
-
-                else if (!value.StartsWith("_") && _lineContent == LineContents.InvalidStatisticLine)
-                {
-                    _lineContent = LineContents.TextComment;
-                    UpdateAllProperties();
-                }
-            }
-        }
+        public string Comment { get; set; }
 
         public bool ChangeToStatOpt
         {
@@ -80,6 +57,24 @@ namespace RubikStatEditor
                 return _lineContent == LineContents.InvalidStatisticLine;
             }
         }
+
+        #region ForSaving
+        public LineContents ItemContent
+        {
+            get
+            {
+                return _lineContent;
+            }
+        }
+
+        public Statistic Statistic
+        {
+            get
+            {
+                return statistic;
+            }
+        }
+        #endregion
 
         public FileItem(Statistic statistic, string comment)
         {
@@ -106,7 +101,8 @@ namespace RubikStatEditor
 
         public void ConvertToTextComment()
         {
-            while (Comment.StartsWith("_")) Comment = Comment.Substring(1);
+            while (Comment.StartsWith("_"))
+                Comment = Comment.Substring(1);
             _lineContent = LineContents.TextComment;
             UpdateAllProperties();
         }
