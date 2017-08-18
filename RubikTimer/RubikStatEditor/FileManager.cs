@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 using RubikTimer;
 
@@ -61,7 +63,7 @@ namespace RubikStatEditor
 
         private void Save(List<FileItem> fileItems, string path)
         {
-            List<string> lines = new List<string>();
+            Queue<string> lines = new Queue<string>();
 
             foreach (FileItem item in fileItems)
             {
@@ -82,7 +84,7 @@ namespace RubikStatEditor
                     line = "_" + item.Comment;
                 }
 
-                lines.Add(line);
+                lines.Enqueue(line);
             }
 
             File.WriteAllLines(path, lines);

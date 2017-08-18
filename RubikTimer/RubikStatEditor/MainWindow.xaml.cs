@@ -26,7 +26,6 @@ namespace RubikStatEditor
     public partial class MainWindow : Window
     {
         private bool saved = true;
-
         private FileManager fileManager;
 
         private ObservableCollection<FileItem> fileItems;
@@ -106,25 +105,6 @@ namespace RubikStatEditor
         }
 
         #region File Menu
-        private void SaveFile(object sender, RoutedEventArgs e)
-        {
-            fileManager.SaveFileItems(new List<FileItem>(fileItems));
-            saved = true;
-        }
-
-        private void SaveFileAs(object sender, RoutedEventArgs e)
-        {
-            /*Open*/
-
-            /*SaveFileDialog dialog = new SaveFileDialog();
-            if (dialog.ShowDialog() == true)
-            {
-                /////////////////// tady jsi to chtel mit nejak jinak.....
-            }*/
-            fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"RubikTimer\test.stxt"));
-            saved = true;
-        }
-
         private void Exit(object sender, RoutedEventArgs e)
         {
             Close();
@@ -138,5 +118,24 @@ namespace RubikStatEditor
                 e.Cancel = true;
             }
         }
+
+        #region Commands
+        private void CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Save(object sender, ExecutedRoutedEventArgs e)
+        {
+            fileManager.SaveFileItems(new List<FileItem>(fileItems));
+            saved = true;
+        }
+
+        private void SaveAs(object sender, ExecutedRoutedEventArgs e)
+        {
+            fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"RubikTimer\test.stxt"));
+            saved = true;
+        }
+        #endregion
     }
 }
