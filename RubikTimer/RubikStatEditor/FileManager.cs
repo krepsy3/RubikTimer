@@ -14,10 +14,11 @@ namespace RubikStatEditor
     class FileManager
     {
         private string filePath;
+        private string extension = ".stxt";
 
         public List<FileItem> LoadFileItemsFromFile(string path)
         {
-            filePath = path;
+            filePath = path.Replace(extension, "");
 
             List<FileItem> fileItems = new List<FileItem>();
 
@@ -63,7 +64,7 @@ namespace RubikStatEditor
 
         private void Save(List<FileItem> fileItems, string path)
         {
-            Queue<string> lines = new Queue<string>();
+            List<string> lines = new List<string>();
 
             foreach (FileItem item in fileItems)
             {
@@ -84,10 +85,10 @@ namespace RubikStatEditor
                     line = "_" + item.Comment;
                 }
 
-                lines.Enqueue(line);
+                lines.Add(line);
             }
 
-            File.WriteAllLines(path, lines);
+            File.WriteAllLines(path + extension, lines);
         }
     }
 }

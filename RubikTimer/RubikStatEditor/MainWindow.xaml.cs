@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Microsoft.Win32;
+using RubikTimer;
 
 namespace RubikStatEditor
 {
@@ -133,8 +134,13 @@ namespace RubikStatEditor
 
         private void SaveAs(object sender, ExecutedRoutedEventArgs e)
         {
-            fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"RubikTimer\test.stxt"));
-            saved = true;
+            FileNameDialog dialog = new FileNameDialog("", "Save As", "Enter name of the file");
+
+            if (dialog.ShowDialog() == true)
+            {
+                fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"RubikTimer\" + dialog.FileName));
+                saved = true;
+            }
         }
         #endregion
     }

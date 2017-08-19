@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RubikStatEditor"
         xmlns:rt="clr-namespace:RubikTimer;assembly=RubikTimer"
         mc:Ignorable="d"
-        Height="450" MinHeight="450" Width="800" MinWidth="800" Icon="resources/editor.ico" ContentRendered="ContRendered" Closing="Window_Closing">
+        Height="450" MinHeight="450" Width="800" MinWidth="800" Icon="resources/editor.ico" ContentRendered="ContRendered" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Save" Executed="Save"/>
