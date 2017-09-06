@@ -65,9 +65,14 @@ namespace RubikTimer
         {
             get
             {
-                long result = 0;
-                Stats.ForEach(s => result += s.SolveTime.Ticks);
-                return new TimeSpan(result / Stats.Count);
+                if (Stats.Count > 0)
+                {
+                    long result = 0;
+                    Stats.ForEach(s => result += s.SolveTime.Ticks);
+                    return new TimeSpan(result / Stats.Count);
+                }
+
+                else return new TimeSpan();
             }
         }
 
@@ -75,10 +80,15 @@ namespace RubikTimer
         {
             get
             {
-                List <Statistic> temp = new List<Statistic>(Stats);
-                temp.Sort();
-                if (temp.Count % 2 == 1) return temp[(temp.Count - 1) / 2].SolveTime;
-                else return ((temp[(temp.Count / 2) - 1] + temp[temp.Count / 2]) / 2).SolveTime;
+                if (Stats.Count > 0)
+                {
+                    List<Statistic> temp = new List<Statistic>(Stats);
+                    temp.Sort();
+                    if (temp.Count % 2 == 1) return temp[(temp.Count - 1) / 2].SolveTime;
+                    else return ((temp[(temp.Count / 2) - 1] + temp[temp.Count / 2]) / 2).SolveTime;
+                }
+
+                else return new TimeSpan();
             }
         }
 
@@ -86,9 +96,14 @@ namespace RubikTimer
         {
             get
             {
-                long result = 0;
-                for (int i = Stats.Count - 5; i < Stats.Count; i++) result += Stats[i].SolveTime.Ticks;
-                return new TimeSpan(result / 5);
+                if (Stats.Count > 4)
+                {
+                    long result = 0;
+                    for (int i = Stats.Count - 5; i < Stats.Count; i++) result += Stats[i].SolveTime.Ticks;
+                    return new TimeSpan(result / 5);
+                }
+
+                else return new TimeSpan();
             }
         }
 
@@ -96,9 +111,14 @@ namespace RubikTimer
         {
             get
             {
-                long result = 0;
-                for (int i = Stats.Count - 10; i < Stats.Count; i++) result += Stats[i].SolveTime.Ticks;
-                return new TimeSpan(result / 10);
+                if (Stats.Count > 9)
+                {
+                    long result = 0;
+                    for (int i = Stats.Count - 10; i < Stats.Count; i++) result += Stats[i].SolveTime.Ticks;
+                    return new TimeSpan(result / 10);
+                }
+
+                else return new TimeSpan();
             }
         }
 
@@ -106,13 +126,18 @@ namespace RubikTimer
         {
             get
             {
-                List<Statistic> temp = new List<Statistic>();
-                for (int i = Stats.Count - 5; i < Stats.Count; i++) temp.Add(Stats[i]);
-                temp.RemoveAt(4);
-                temp.RemoveAt(0);
-                long result = 0;
-                temp.ForEach((s) => result += s.SolveTime.Ticks);
-                return new TimeSpan(result / 3);
+                if (Stats.Count > 5)
+                {
+                    List<Statistic> temp = new List<Statistic>();
+                    for (int i = Stats.Count - 5; i < Stats.Count; i++) temp.Add(Stats[i]);
+                    temp.RemoveAt(4);
+                    temp.RemoveAt(0);
+                    long result = 0;
+                    temp.ForEach((s) => result += s.SolveTime.Ticks);
+                    return new TimeSpan(result / 3);
+                }
+
+                else return new TimeSpan();
             }
         }
 
@@ -120,13 +145,18 @@ namespace RubikTimer
         {
             get
             {
-                List<Statistic> temp = new List<Statistic>();
-                for (int i = Stats.Count - 12; i < Stats.Count; i++) temp.Add(Stats[i]);
-                temp.RemoveAt(11);
-                temp.RemoveAt(0);
-                long result = 0;
-                temp.ForEach((s) => result += s.SolveTime.Ticks);
-                return new TimeSpan(result / 10);
+                if (Stats.Count > 9)
+                {
+                    List<Statistic> temp = new List<Statistic>();
+                    for (int i = Stats.Count - 12; i < Stats.Count; i++) temp.Add(Stats[i]);
+                    temp.RemoveAt(11);
+                    temp.RemoveAt(0);
+                    long result = 0;
+                    temp.ForEach((s) => result += s.SolveTime.Ticks);
+                    return new TimeSpan(result / 10);
+                }
+
+                else return new TimeSpan();
             }
         }
         #endregion
@@ -139,7 +169,7 @@ namespace RubikTimer
         }
 
         public void AddStatistic(Statistic statistic) { Stats.Add(statistic); }
-        public void RemoveLastStatistic() { Stats.RemoveAt(-Stats.Count); }
+        public void RemoveLastStatistic() { if (Stats.Count > 0) Stats.RemoveAt(-Stats.Count); }
 
         private bool LoadCurrentFile()
         {
