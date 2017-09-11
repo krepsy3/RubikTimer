@@ -114,9 +114,12 @@ namespace RubikStatEditor
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (!saved && MessageBox.Show("Do you want to exit without save?", "Exit", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+
+            if (!saved)
             {
-                e.Cancel = true;
+                MessageBoxResult mbr = MessageBox.Show("Your changes have not been saved. Do you wish to save?", "Save and exit", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Yes);
+                if (mbr == MessageBoxResult.Cancel) e.Cancel = true;
+                else if (mbr == MessageBoxResult.Yes) ApplicationCommands.Save.Execute(null, null);
             }
         }
 
