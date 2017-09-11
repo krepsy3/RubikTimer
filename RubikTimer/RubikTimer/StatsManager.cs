@@ -32,13 +32,10 @@ namespace RubikTimer
             {
                 _stats = value;
                 UpdateProperty("Stats");
-                foreach (string statproperty in statproperties) UpdateProperty(statproperty);
             }
         }
         #endregion
         #region statproperties
-        private string[] statproperties = new string[] { "Last", "Best", "Worst", "Average", "Median", "AverageLastFive", "AverageLastTen", "AverageLastThreeOfFive", "AverageLastTenOfTwelve" };
-
         public Statistic Last { get { return Stats[-Stats.Count]; } }
 
         public TimeSpan Best

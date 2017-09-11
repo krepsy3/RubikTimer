@@ -104,9 +104,9 @@ namespace RubikTimer
                         default:
                             {
                                 #region openfile
-                                if (File.Exists(arg) && !pathhandled)
+                                if (File.Exists(arg) && new FileInfo(arg).Extension == statsmanager.extension && !pathhandled)
                                 {
-                                    if (new FileInfo(arg).Extension == statsmanager.extension && arg.StartsWith(statsmanager.DirPath))
+                                    if (arg.StartsWith(statsmanager.DirPath))
                                     {
                                         pathhandled = true;
                                         string filename = (new FileInfo(arg).Name);
@@ -151,6 +151,8 @@ namespace RubikTimer
                                             }
                                         }
                                     }
+
+                                    else MessageBox.Show("You attempted to open statistic file " + (new FileInfo(arg).Name) + " from other directory than the current one. Please move the file into the current directory (" + statsmanager.DirPath + ") to be able to use it in the application.", "File selection invalid", MessageBoxButton.OK, MessageBoxImage.Error);
                                 }
                                 #endregion
 

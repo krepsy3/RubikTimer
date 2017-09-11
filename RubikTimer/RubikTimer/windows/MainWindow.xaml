@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RubikTimer"
         mc:Ignorable="d"
-        Name="Main" MinHeight="600" Height="600" MinWidth="800" Width="800" Icon="resources/timer.ico"
-        KeyDown="KeyPress" KeyUp="KeyRelease" MouseDown="MouseClick" SizeChanged="MainSize" Closing="ClosingWindow" ContentRendered="WinContRendered">
+        Name="Main" MinHeight="600" Height="600" MinWidth="800" Width="800" Icon="/./resources/timer.ico"
+        KeyDown="KeyPress" KeyUp="KeyRelease" MouseDown="MouseClick" SizeChanged="MainSize" Closing="ClosingWindow" ContentRendered="WinContRendered" >
 
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New" CanExecute="CanCmdOnStart" Executed="CreateFile" />

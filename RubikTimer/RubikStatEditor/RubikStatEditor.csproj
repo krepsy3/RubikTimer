@@ -98,12 +98,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RubikTimer\RubikTimer.csproj">
-      <Project>{123a0c13-75ec-408c-81f7-221325db76b6}</Project>
-      <Name>RubikTimer</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="resources\about.ico" />
     <Resource Include="resources\about.png" />
     <Resource Include="resources\editor.ico" />
@@ -116,6 +110,12 @@
     <Resource Include="resources\main.png" />
     <Resource Include="resources\timer.ico" />
     <Resource Include="resources\timer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RubikTimer\RubikTimer.csproj">
+      <Project>{b387057f-922b-43cd-bd7f-42105ebe9b2d}</Project>
+      <Name>RubikTimer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -10,7 +10,7 @@
 
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Save" Executed="Save"/>
-        <CommandBinding Command="rt:CustomCommands.SaveAs" Executed="SaveAs"/>
+        <CommandBinding Command="rt:CustomCommands.SaveAs" Executed="SaveAs"/> 
     </Window.CommandBindings>
     
     <Window.Resources>
@@ -76,7 +76,7 @@
         <Menu Padding="10,0" DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Save" Command="ApplicationCommands.Save"/>
-                <MenuItem Header="Save As" Command="rt:CustomCommands.SaveAs"/>
+                <MenuItem Header="Save As" Command="rt:CustomCommands.SaveAs"/> 
                 <MenuItem Header="Exit" Click="Exit"/>
             </MenuItem>
             <MenuItem Header="Help">
