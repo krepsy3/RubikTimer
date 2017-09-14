@@ -29,6 +29,7 @@
                 <MenuItem Header="Change User data Folder" Command="ApplicationCommands.Replace" />
                 <MenuItem Header="Open the User data Folder" Command="ApplicationCommands.Find" />
                 <MenuItem Header="Edit statistic file" Command="local:CustomCommands.Edit" />
+                <MenuItem Header="Don't save statistics to file" IsCheckable="True" Name="dontSaveMenuItem" Click="UpdateDontSave" />
                 <MenuItem Header="Exit" Command="local:CustomCommands.Exit" />
             </MenuItem>
 
@@ -55,7 +56,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Border Padding="25" BorderBrush="Black" BorderThickness="2" Name="TimeBorder" Grid.Row="1" Grid.ColumnSpan="3">
@@ -79,14 +79,15 @@
                     <Grid.Resources>
                         <Style TargetType="Border" x:Key="PhaseBorder">
                             <Setter Property="BorderBrush" Value="#FFB90000" />
+                            <Setter Property="Padding" Value="7" />
                         </Style>
                     </Grid.Resources>
 
-                    <Border x:Name="ScrambleBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0" Padding="5" >
+                    <Border x:Name="ScrambleBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0">
                         <TextBlock Text="Scramble your cube" Margin="5" />
                     </Border>
 
-                    <Border x:Name="InspectionBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0" Grid.Row="1" Padding="5">
+                    <Border x:Name="InspectionBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0" Grid.Row="1">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Inspection time:" Margin="5,5,0,5" />
                             <TextBox Margin="2,5" MinWidth="25" Text="{Binding Path=InspectionSeconds, Mode=TwoWay}" TextChanged="ByteTextBoxCheck" ToolTip="Set maximal inspection time lenght" />
@@ -95,62 +96,104 @@
                         </StackPanel>
                     </Border>
 
-                    <Border x:Name="TimerBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0" Grid.Row="2" Padding="5">
+                    <Border x:Name="TimerBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0" Grid.Row="2">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Solving the cube" Margin="5,5,0,5" />
-                            <CheckBox x:Name="SolveCheckBox" Focusable="False"  Margin="30,5" ToolTip="If unchecked, program won't measure solving time" Unchecked="PhaseSelect"  />
+                            <CheckBox x:Name="SolveCheckBox" Focusable="False" Margin="30,5" ToolTip="If unchecked, program won't measure solving time" Unchecked="PhaseSelect"  />
                         </StackPanel>
                     </Border>
 
-                    <Border x:Name="SolvedBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0" Grid.Row="3" Padding="5">
+                    <Border x:Name="SolvedBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0" Grid.Row="3">
                         <TextBlock Text="{Binding Path=SolveTime, StringFormat='Solved in: {0:m\:s\.fff}'}" Margin="5" />
                     </Border>
                 </Grid>
             </StackPanel>
 
-            <StackPanel x:Name="StatsStackPanel1" Grid.Row="2" Grid.Column="1">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="0,30,10,0" Text="Statistics:" />
-                    <TextBlock Margin="0,30,10,0" Text="Currently using" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="10,5,10,0" Text="Best:" />
-                    <TextBlock Margin="0,5,0,0" Text="0:6.897" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="10,5,10,0" Text="Best:" />
-                    <TextBlock Margin="0,5,0,0" Text="0:6.897" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="10,5,10,0" Text="Best:" />
-                    <TextBlock Margin="0,5,0,0" Text="0:6.897" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="10,5,10,0" Text="Best:" />
-                    <TextBlock Margin="0,5,0,0" Text="0:6.897" />
-                </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="1">
+                <Grid Margin="20,30,0,0" Name="statsGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="0,2,8,3" />
+                        </Style>
+                    </Grid.Resources>
+                    <TextBlock Text="Time Stats:" Margin="-20,0,0,8" />
+                    <Button Content="View Statistics" Grid.Column="1" HorizontalAlignment="Left" Padding="10,0" />
+                    
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" >
+                        <TextBlock Text="Last:" />
+                        <TextBlock Text="{Binding Path='Last'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" >
+                        <TextBlock Text="Best:" />
+                        <TextBlock Text="{Binding Path='Best', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" >
+                        <TextBlock Text="Worst:" />
+                        <TextBlock Text="{Binding Path='Worst', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
+                        <TextBlock Text="Average:" />
+                        <TextBlock Text="{Binding Path='Average', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" >
+                        <TextBlock Text="Median:" />
+                        <TextBlock Text="{Binding Path='Median', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" >
+                        <TextBlock Text="Avg of last 5:" />
+                        <TextBlock Text="{Binding Path='AvgLastFive', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1" >
+                        <TextBlock Text="Best Avg of 5:" />
+                        <TextBlock Text="{Binding Path='AvgBestFive', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" >
+                        <TextBlock Text="Avg of last 10:" />
+                        <TextBlock Text="{Binding Path='AvgLastTen', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" >
+                        <TextBlock Text="Best Avg of 10:" />
+                        <TextBlock Text="{Binding Path='AvgBestTen', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" >
+                        <TextBlock Text="Avg of last 3of5:" />
+                        <TextBlock Text="{Binding Path='AvgLastThreeFive', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1" >
+                        <TextBlock Text="Best Avg of 3of5:" />
+                        <TextBlock Text="{Binding Path='AvgBestThreeFive', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" >
+                        <TextBlock Text="Avg of last 10of12:" />
+                        <TextBlock Text="{Binding Path='AvgLastTenTwelve', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" >
+                        <TextBlock Text="Best Avg of 10of12:" />
+                        <TextBlock Text="{Binding Path='AvgBestTenTwelve', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+
+                    <TextBlock Name="infoTextBlock" Grid.Row="8" Grid.ColumnSpan="2" Margin="-10,7,0,0" Text="{Binding Info}" Foreground="{Binding InfoBrush}" TextWrapping="Wrap" FontStyle="Italic" />
+
+                </Grid>
             </StackPanel>
 
-            <StackPanel x:Name="StatsStackPanel2" Grid.Row="2" Grid.Column="2">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="10,50,10,0" Text="Best:" />
-                    <TextBlock Margin="0,50,0,0" Text="0:6.897" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="10,5,10,0" Text="Best:" />
-                    <TextBlock Margin="0,5,0,0" Text="0:6.897" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="10,5,10,0" Text="Best:" />
-                    <TextBlock Margin="0,5,0,0" Text="0:6.897" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="10,5,10,0" Text="Best:" />
-                    <TextBlock Margin="0,5,0,0" Text="0:6.897" />
-                </StackPanel>
-            </StackPanel>
-            
-            <Grid Margin="0,10" x:Name="ScrambleGrid" Grid.ColumnSpan="3" Grid.Row="3" SizeChanged="ScrambleGridSize">
+            <Separator Grid.ColumnSpan="3" Grid.Row="4" VerticalAlignment="Top" Margin="0,10" Background="Black" />
+            <Grid Margin="0,25,0,0" x:Name="ScrambleGrid" Grid.ColumnSpan="3" Grid.Row="4" SizeChanged="ScrambleGridSize">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20*" />
                     <ColumnDefinition Width="6*" />
@@ -162,7 +205,7 @@
                 </ScrollViewer>
                 <Button Height="35" Margin="10,0" VerticalAlignment="Top" Grid.Column="1" Focusable="False"  Content="Generate scramble" Command="local:CustomCommands.Generate" ToolTip="Click to generate new random scrambling moves sequence" />
                 <TextBox Height="35" VerticalAlignment="Top" Grid.Column="2" x:Name="ScrambleLenghtTextBox" Text="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ToolTip="Number of scrambling moves to be generated" TextChanged="ByteTextBoxCheck" />
-                <CheckBox Grid.Column="3" VerticalAlignment="Top" Margin="10,10,0,0" IsChecked="{Binding Path=AutoScramble, Mode=TwoWay}" Focusable="False" Name="AutoScrambleCheckBox" ToolTip="Check to automatically generate a new scramble algorithm for each solve." />
+                <CheckBox Grid.Column="3" VerticalAlignment="Top" Margin="10,10,0,0" IsChecked="{Binding Path=AutoScramble, Mode=TwoWay}" Focusable="False" Name="AutoScrambleCheckBox" ToolTip="Check to automatically generate a new scramble algorithm for each solve. Also, the algorithm will be written to statistic info." />
             </Grid>
         </Grid>
     </DockPanel>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RubikTimer"
         mc:Ignorable="d"
-        Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" MouseDown="WinMouseDown" Icon="resources/file.ico" >
+        Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" MouseDown="WinMouseDown" Icon="/./resources/file.ico" >
     <Window.CommandBindings>
         <CommandBinding Command="MediaCommands.Select" CanExecute="CanSelect" Executed="Select" />
     </Window.CommandBindings>

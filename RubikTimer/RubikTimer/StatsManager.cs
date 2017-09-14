@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace RubikTimer
 {
@@ -23,146 +24,73 @@ namespace RubikTimer
 
         private bool _statfileloaded;
         public bool StatFileLoaded { get { return _statfileloaded; } set { _statfileloaded = value; UpdateProperty("StatFileLoaded"); } }
+        private bool dontSaveStats;
 
-        private List<Statistic> _stats;
-        public List<Statistic> Stats
+        private ObservableCollection<Statistic> _stats;
+        public ObservableCollection<Statistic> Stats
         {
             get { return _stats; }
             private set
             {
                 _stats = value;
                 UpdateProperty("Stats");
+                UpdateStats();
             }
         }
         #endregion
         #region statproperties
-        public Statistic Last { get { return Stats[-Stats.Count]; } }
-
-        public TimeSpan Best
+        private void ResetStats()
         {
-            get
-            {
-                Statistic b = Stats[0];
-                Stats.ForEach(s => { if (s < b) b = s; });
-                return b.SolveTime;
-            }
+            Last = new Statistic(new TimeSpan(0), "");
+            Best = new TimeSpan(0);
+            Worst = new TimeSpan(0);
+            Average = new TimeSpan(0);
+            Median = new TimeSpan(0);
+            AvgBestFive = new TimeSpan(0);
+            AvgLastFive = new TimeSpan(0);
+            AvgBestTen = new TimeSpan(0);
+            AvgLastTen = new TimeSpan(0);
+            AvgBestThreeFive = new TimeSpan(0);
+            AvgLastThreeFive = new TimeSpan(0);
+            AvgBestTenTwelve = new TimeSpan(0);
+            AvgLastTenTwelve = new TimeSpan(0);
         }
 
-        public TimeSpan Worst
+        private void UpdateStats()
         {
-            get
-            {
-                Statistic w = Stats[0];
-                Stats.ForEach(s => { if (s > w) w = s; });
-                return w.SolveTime;
-            }
+
         }
 
-        public TimeSpan Average
-        {
-            get
-            {
-                if (Stats.Count > 0)
-                {
-                    long result = 0;
-                    Stats.ForEach(s => result += s.SolveTime.Ticks);
-                    return new TimeSpan(result / Stats.Count);
-                }
-
-                else return new TimeSpan();
-            }
-        }
-
-        public TimeSpan Median
-        {
-            get
-            {
-                if (Stats.Count > 0)
-                {
-                    List<Statistic> temp = new List<Statistic>(Stats);
-                    temp.Sort();
-                    if (temp.Count % 2 == 1) return temp[(temp.Count - 1) / 2].SolveTime;
-                    else return ((temp[(temp.Count / 2) - 1] + temp[temp.Count / 2]) / 2).SolveTime;
-                }
-
-                else return new TimeSpan();
-            }
-        }
-
-        public TimeSpan AverageLastFive
-        {
-            get
-            {
-                if (Stats.Count > 4)
-                {
-                    long result = 0;
-                    for (int i = Stats.Count - 5; i < Stats.Count; i++) result += Stats[i].SolveTime.Ticks;
-                    return new TimeSpan(result / 5);
-                }
-
-                else return new TimeSpan();
-            }
-        }
-
-        public TimeSpan AverageLastTen
-        {
-            get
-            {
-                if (Stats.Count > 9)
-                {
-                    long result = 0;
-                    for (int i = Stats.Count - 10; i < Stats.Count; i++) result += Stats[i].SolveTime.Ticks;
-                    return new TimeSpan(result / 10);
-                }
-
-                else return new TimeSpan();
-            }
-        }
-
-        public TimeSpan AverageLastThreeOfFive
-        {
-            get
-            {
-                if (Stats.Count > 5)
-                {
-                    List<Statistic> temp = new List<Statistic>();
-                    for (int i = Stats.Count - 5; i < Stats.Count; i++) temp.Add(Stats[i]);
-                    temp.RemoveAt(4);
-                    temp.RemoveAt(0);
-                    long result = 0;
-                    temp.ForEach((s) => result += s.SolveTime.Ticks);
-                    return new TimeSpan(result / 3);
-                }
-
-                else return new TimeSpan();
-            }
-        }
-
-        public TimeSpan AverageLastTenOfTwelve
-        {
-            get
-            {
-                if (Stats.Count > 9)
-                {
-                    List<Statistic> temp = new List<Statistic>();
-                    for (int i = Stats.Count - 12; i < Stats.Count; i++) temp.Add(Stats[i]);
-                    temp.RemoveAt(11);
-                    temp.RemoveAt(0);
-                    long result = 0;
-                    temp.ForEach((s) => result += s.SolveTime.Ticks);
-                    return new TimeSpan(result / 10);
-                }
-
-                else return new TimeSpan();
-            }
-        }
+        #region statpropertiesdefinitions
+        public Statistic Last { get; private set; } 
+        public TimeSpan Best { get; private set; }
+        public TimeSpan Worst { get; private set; }
+        public TimeSpan Average { get; private set; }
+        public TimeSpan Median { get; private set; }
+        public TimeSpan AvgLastFive { get; private set; }
+        public TimeSpan AvgBestFive { get; private set; }
+        public TimeSpan AvgLastTen { get; private set; }
+        public TimeSpan AvgBestTen { get; private set; }
+        public TimeSpan AvgLastThreeFive { get; private set; }
+        public TimeSpan AvgBestThreeFive { get; private set; }
+        public TimeSpan AvgLastTenTwelve { get; private set; }
+        public TimeSpan AvgBestTenTwelve { get; private set; }
+        #endregion
         #endregion
 
-        public StatsManager(string dirpath, string currentfilename)
+        public StatsManager(string dirpath, string currentfilename, bool dontSaveStats)
         {
             DirPath = dirpath;
             CurrentFileName = currentfilename;
-            StatFileLoaded = LoadCurrentFile();
+            this.dontSaveStats = dontSaveStats;
+
+            if (!dontSaveStats) StatFileLoaded = LoadCurrentFile();
+            else
+            {
+                StatFileLoaded = false;
+                ResetStats();
+                Stats = new ObservableCollection<Statistic>();
+            }
         }
 
         public void AddStatistic(Statistic statistic) { Stats.Add(statistic); }
@@ -171,7 +99,8 @@ namespace RubikTimer
         private bool LoadCurrentFile()
         {
             bool result = true;
-            Stats = new List<Statistic>();
+            Stats = new ObservableCollection<Statistic>();
+            ResetStats();
 
             if (Directory.Exists(DirPath))
             {
@@ -256,7 +185,7 @@ namespace RubikTimer
             {
                 SaveCurrentFile();
                 CurrentFileName = filename;
-                LoadCurrentFile();
+                StatFileLoaded = LoadCurrentFile();
             }
         }
 

@@ -26,18 +26,20 @@ namespace RubikTimer
             "AutoScrambleGenerate = ",
             "ScrambleLenght = ",
             "PuzzleType = ",
+            "DontSaveStats = ",
             "UserFolderPath = ",
             "CurrentFileName = "
             };
 
         private string[] defconfig =
         {
-            "true",
+            "True",
             "15",
-            "true",
-            "true",
+            "True",
+            "True",
             "20",
             "2",
+            "False",
             Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"RubikTimer")),
             "rubikstat0"
             };
@@ -72,8 +74,9 @@ namespace RubikTimer
             bool autoscramblegenerate = bool.Parse(defconfig[3]);
             byte scramblesteps = byte.Parse(defconfig[4]);
             byte puzzletype = byte.Parse(defconfig[5]);
-            string userfolderpath = defconfig[6];
-            string currentfilename = defconfig[7];
+            bool dontsave = bool.Parse(defconfig[6]);
+            string userfolderpath = defconfig[7];
+            string currentfilename = defconfig[8];
             
             foreach(string conf in config)
             {
@@ -89,22 +92,23 @@ namespace RubikTimer
                             case 3: if (!bool.TryParse(conf.Substring(confitem.Length), out autoscramblegenerate)) autoscramblegenerate = bool.Parse(defconfig[3]); break;
                             case 4: if (!byte.TryParse(conf.Substring(confitem.Length), out scramblesteps)) scramblesteps = byte.Parse(defconfig[4]); break;
                             case 5: if (!byte.TryParse(conf.Substring(confitem.Length), out puzzletype)) puzzletype = byte.Parse(defconfig[5]); break;
-                            case 6:
+                            case 6: if (!bool.TryParse(conf.Substring(confitem.Length), out dontsave)) dontsave = bool.Parse(defconfig[6]); break;
+                            case 7:
                                 {
                                     userfolderpath = conf.Substring(confitem.Length);
 
                                     try { Directory.CreateDirectory(userfolderpath); }
-                                    catch { userfolderpath = defconfig[6]; Directory.CreateDirectory(userfolderpath); }
+                                    catch { userfolderpath = defconfig[7]; Directory.CreateDirectory(userfolderpath); }
                                     
                                     break;
                                 }
-                            case 7: currentfilename = conf.Substring(confitem.Length); break;
+                            case 8: currentfilename = conf.Substring(confitem.Length); break;
                         }
                     }
                 }
             }
 
-            Window main = new MainWindow(docountdown, countdownsecs, docounting, autoscramblegenerate, scramblesteps, puzzletype, userfolderpath, currentfilename);
+            Window main = new MainWindow(docountdown, countdownsecs, docounting, autoscramblegenerate, scramblesteps, puzzletype, dontsave, userfolderpath, currentfilename);
             main.Show();
         }
     }

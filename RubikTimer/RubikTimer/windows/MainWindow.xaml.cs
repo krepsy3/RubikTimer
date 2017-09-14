@@ -45,22 +45,27 @@ namespace RubikTimer
         public byte Type { get { return _type; } private set { _type = value; UpdateProperty("Type"); } }
         private bool _autoscramble;
         public bool AutoScramble { get { return _autoscramble; } set { _autoscramble = value; UpdateProperty("AutoScramble"); } }
+        private bool _dontsavestats;
+        public bool DontSaveStats { get { return _dontsavestats; } set { _dontsavestats = value; UpdateProperty("DontSaveStats"); } }
+        private string _info;
+        public string Info { get { return _info; } private set { _info = value; UpdateProperty("Info"); UpdateProperty("InfoBrush"); } }
+        public SolidColorBrush InfoBrush { get { if (Info.StartsWith("Warning")) return new SolidColorBrush(Colors.Red); else return new SolidColorBrush(Colors.Black); } }
         #endregion
 
-        public MainWindow(bool countdown, byte countdownsecs, bool count, bool automaticgeneration, byte gensteps, byte type, string userpath, string currentfile)
+        public MainWindow(bool countdown, byte countdownsecs, bool count, bool automaticgeneration, byte gensteps, byte type, bool dontsavestats, string userpath, string currentfile)
         {
             timer = new Timer();
             SolveTime = new DateTime(0);
             gen = new ScrambleGenerator();
-            statsmanager = new StatsManager(userpath, currentfile);
+            statsmanager = new StatsManager(userpath, currentfile, dontsavestats);
             skipquitconfirmation = false;
             InitializeComponent();
 
             TimeBorder.DataContext = timer;
             PhaseStackPanel.DataContext = this;
             ScrambleGrid.DataContext = this;
-            StatsStackPanel1.DataContext = statsmanager;
-            StatsStackPanel2.DataContext = statsmanager;
+            infoTextBlock.DataContext = this;
+            statsGrid.DataContext = statsmanager;
 
             PropertyChanged += UpdatePhase;
             timer.PropertyChanged += TimerPropertyUpdate;
@@ -68,10 +73,12 @@ namespace RubikTimer
             InspectionCheckBox.IsChecked = countdown;
             SolveCheckBox.IsChecked = count;
             if (!countdown && !count) SolveCheckBox.IsChecked = true;
+            ScrambleLenghtTextBox.Text = gensteps.ToString();
+            dontSaveMenuItem.IsChecked = dontsavestats;
 
             AutoScramble = automaticgeneration;
             InspectionSeconds = countdownsecs;
-            ScrambleLenghtTextBox.Text = gensteps.ToString();
+            DontSaveStats = dontsavestats;
             Type = type;
             Title = "RubikTimer - Professional offline speedcubing timer";
             Phase = SolvePhase.Scramble;
@@ -90,6 +97,8 @@ namespace RubikTimer
 
         private void WinContRendered(object sender, EventArgs e)
         {
+            UpdateInfo();
+
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
@@ -315,6 +324,26 @@ namespace RubikTimer
             }
         }
 
+        private void UpdateDontSave(object sender, RoutedEventArgs e)
+        {
+            if (dontSaveMenuItem.IsChecked)
+            {
+                statsmanager.ChangeCurrentFile("");
+                DontSaveStats = true;
+            }
+
+            else DontSaveStats = false;
+
+            UpdateInfo();
+        }
+
+        private void UpdateInfo()
+        {
+            if (statsmanager.StatFileLoaded && !DontSaveStats) Info = "Statistic is being saved into " + statsmanager.CurrentFileName + statsmanager.extension;
+            else if (DontSaveStats) Info = "Statistic saving is turned off. They are temporary and will be lost on program close.";
+            else Info = "Warning - Statistic is not being saved and will be lost. Please select a statistic file to be saved into.";
+        }
+
         private void ByteTextBoxCheck(object sender, TextChangedEventArgs e)
         {
             byte b = 0;
@@ -398,6 +427,11 @@ namespace RubikTimer
             if (!((bool)d.ShowDialog())) return;
             else
             {
+                if (d.FileName == "" || d.FileName == " " || d.FileName == "  ")
+                {
+                    MessageBox.Show("Invalid file name. File name cannot be blank.", "Invalid name picked", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    goto FileNamePick;
+                }
                 try
                 {
                     if (!statsmanager.CreateCurrentFile(d.FileName, false))
@@ -421,7 +455,9 @@ namespace RubikTimer
                 {
                     MessageBox.Show("Creation of the new file failed due to the following exception: " + ex.Message, "File creation error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            } 
+            }
+
+            UpdateInfo();
         }
 
         private void OpenFile(object sender, ExecutedRoutedEventArgs e)
@@ -450,6 +486,8 @@ namespace RubikTimer
             }
 
             else MessageBox.Show("There is no Statistic file to be changed to, please select Create new statistic file (Ctrl + N) to create one.", "No Statistic file to swap to", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            UpdateInfo();
         }
 
         private void ChangeFolder(object sender, ExecutedRoutedEventArgs e)
@@ -477,6 +515,8 @@ namespace RubikTimer
                     SaveConfig();
                 }
             }
+
+            UpdateInfo();
         }
 
         private void EditStats(object sender, ExecutedRoutedEventArgs e)
@@ -557,8 +597,9 @@ namespace RubikTimer
                             case 3: sw.WriteLine(App.configitems[i] + AutoScrambleCheckBox.IsChecked); break;
                             case 4: sw.WriteLine(App.configitems[i] + ScrambleLenghtTextBox.Text); break;
                             case 5: sw.WriteLine(App.configitems[i] + Type); break;
-                            case 6: sw.WriteLine(App.configitems[i] + statsmanager.DirPath); break;
-                            case 7: sw.WriteLine(App.configitems[i] + statsmanager.CurrentFileName); break;
+                            case 6: sw.WriteLine(App.configitems[i] + DontSaveStats); break;
+                            case 7: sw.WriteLine(App.configitems[i] + statsmanager.DirPath); break;
+                            case 8: sw.WriteLine(App.configitems[i] + statsmanager.CurrentFileName); break;
                         }
                     }
 

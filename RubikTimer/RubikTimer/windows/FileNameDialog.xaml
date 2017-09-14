@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RubikTimer"
         mc:Ignorable="d"
-        Height="160" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Icon="resources/file.ico" >    
+        Height="160" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Icon="/./resources/file.ico" >    
     <DockPanel>
         <TextBlock Name="messageTextBlock" DockPanel.Dock="Top" Margin="10" TextWrapping="Wrap" />
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft">

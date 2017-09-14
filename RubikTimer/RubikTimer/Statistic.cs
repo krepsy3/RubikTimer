@@ -50,6 +50,6 @@ namespace RubikTimer
 
         public override bool Equals(object obj) { return (obj is Statistic && this == (Statistic)obj); }
         public override int GetHashCode() { return SolveTime.GetHashCode() ^ Info.GetHashCode(); }
-        public override string ToString() { return SolveTime.ToString(@"m\:s\.fff") + " " + Info; }
+        public override string ToString() { return SolveTime.ToString(@"h\:m\:s\.fff") + " " + Info; }
     }
 }
