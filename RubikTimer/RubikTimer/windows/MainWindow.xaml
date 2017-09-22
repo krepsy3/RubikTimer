@@ -9,8 +9,8 @@
         KeyDown="KeyPress" KeyUp="KeyRelease" MouseDown="MouseClick" SizeChanged="MainSize" Closing="ClosingWindow" ContentRendered="WinContRendered" >
 
     <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.New" CanExecute="CanCmdOnStart" Executed="CreateFile" />
-        <CommandBinding Command="ApplicationCommands.Open" CanExecute="CanCmdOnStart" Executed="OpenFile" />
+        <CommandBinding Command="ApplicationCommands.New" CanExecute="CanCmdOnStartFile" Executed="CreateFile" />
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="CanCmdOnStartFile" Executed="OpenFile" />
         <CommandBinding Command="ApplicationCommands.Replace" CanExecute="CanCmdOnStart" Executed="ChangeFolder" />
         <CommandBinding Command="ApplicationCommands.Find" CanExecute="CanCmdTrue" Executed="OpenFolder" />
         <CommandBinding Command="local:CustomCommands.Edit" CanExecute="CanCmdTrue" Executed="EditStats" />
@@ -18,7 +18,7 @@
         <CommandBinding Command="ApplicationCommands.Help" CanExecute="CanCmdTrue" Executed="DisplayHelp" />
         <CommandBinding Command="local:CustomCommands.About" CanExecute="CanCmdTrue" Executed="DisplayAbout" />
         <CommandBinding Command="MediaCommands.Select" CanExecute="CanCmdOnStart" Executed="SelectPuzzle" />
-        <CommandBinding Command="ApplicationCommands.Delete" CanExecute="CanCmdOnStart" Executed="DeleteLastStat" />
+        <CommandBinding Command="local:CustomCommands.View" CanExecute="CanCmdOnStart" Executed="ViewStats" />
         <CommandBinding Command="local:CustomCommands.Generate" CanExecute="CanCmdNoSolve" Executed="GenerateScramble" />
     </Window.CommandBindings>
     <DockPanel>
@@ -117,7 +117,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
@@ -132,8 +132,8 @@
                         </Style>
                     </Grid.Resources>
                     <TextBlock Text="Time Stats:" Margin="-20,0,0,8" />
-                    <Button Content="View Statistics" Grid.Column="1" HorizontalAlignment="Left" Padding="10,0" />
-                    
+                    <Button Content="View Statistics" Grid.Column="1" HorizontalAlignment="Left" Padding="10,0" Command="local:CustomCommands.View" Focusable="False" />
+
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" >
                         <TextBlock Text="Last:" />
                         <TextBlock Text="{Binding Path='Last'}" />

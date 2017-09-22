@@ -32,6 +32,7 @@ namespace RubikTimer
         private ScrambleGenerator gen;
 
         private bool skipquitconfirmation;
+        private int newstats;
 
         #region Properties
         private SolvePhase _phase;
@@ -313,11 +314,18 @@ namespace RubikTimer
                             InspectionBorder.BorderThickness = new Thickness(0);
                             TimerBorder.BorderThickness = new Thickness(0);
                             SolvedBorder.BorderThickness = new Thickness(1);
-                            statsmanager.Stats.Add(new Statistic(
+
+                            statsmanager.AddStatistic(new Statistic(
                                 timer.Timeproperty,
-                                "Date: " + DateTime.Now.ToString(@"0:d\.M\.yyyy") +
+                                "Date: " + DateTime.Now.ToString(@"d\.M\.yyyy") +
                                 " Puzzle: " + ScrambleGenerator.Type[Type] +
                                 ((AutoScramble && Scramble.Length > 0) ? (" Scramble: " + Scramble) : "")));
+                            newstats++;
+
+                            if (newstats >= 20)
+                            {
+                                SaveStats(false);
+                            }
                             break;
                         }
                 }
@@ -332,8 +340,10 @@ namespace RubikTimer
                 DontSaveStats = true;
             }
 
-            else DontSaveStats = false;
-
+            else
+            {
+                DontSaveStats = false;
+            } 
             UpdateInfo();
         }
 
@@ -388,6 +398,7 @@ namespace RubikTimer
         private void CanCmdTrue(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
         private void CanCmdNoSolve(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.Scramble || Phase == SolvePhase.End); }
         private void CanCmdOnStart(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = Phase == SolvePhase.Scramble; }
+        private void CanCmdOnStartFile(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.Scramble && !DontSaveStats); }
 
         private void SelectPuzzle(object sender, ExecutedRoutedEventArgs e)
         {
@@ -408,7 +419,7 @@ namespace RubikTimer
         private void CreateFile(object sender, ExecutedRoutedEventArgs e)
         {
             string filename = "rubikstat";
-            int filenamenum = 0;
+            int filenamenum = -1;
             foreach (string file in statsmanager.GetStatisticFiles(false))
             {
                 if (file.StartsWith(filename))
@@ -463,7 +474,7 @@ namespace RubikTimer
         private void OpenFile(object sender, ExecutedRoutedEventArgs e)
         {
             List<string> files = statsmanager.GetStatisticFiles(false);
-            files.Remove(statsmanager.CurrentFileName);
+            if (statsmanager.StatFileLoaded) files.Remove(statsmanager.CurrentFileName);
             files = new List<string>(files);
 
             if (files.Count > 0)
@@ -485,6 +496,7 @@ namespace RubikTimer
                 }
             }
 
+            else if (statsmanager.StatFileLoaded) MessageBox.Show("There isn't any other Statistic file to be changed to, please select Create new statistic file (Ctrl + N) to create one.", "No Statistic file to swap to", MessageBoxButton.OK, MessageBoxImage.Information);
             else MessageBox.Show("There is no Statistic file to be changed to, please select Create new statistic file (Ctrl + N) to create one.", "No Statistic file to swap to", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             UpdateInfo();
@@ -521,7 +533,7 @@ namespace RubikTimer
 
         private void EditStats(object sender, ExecutedRoutedEventArgs e)
         {
-            statsmanager.SaveCurrentFile();
+            SaveStats(true);
 
             List<string> files = statsmanager.GetStatisticFiles(false);
             FilePickerDialog d = new FilePickerDialog(files,"Pick a file for editing","Please pick a file from the list to be edited:");
@@ -553,8 +565,11 @@ namespace RubikTimer
                 Scramble = gen.Generate(Type, byte.Parse(ScrambleLenghtTextBox.Text));
         }
 
-        private void DeleteLastStat(object sender, ExecutedRoutedEventArgs e) { }
-
+        private void ViewStats(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveStats(true);
+            new itemViewDialog(statsmanager).ShowDialog();
+        }
         #endregion
 
         private void ClosingWindow(object sender, CancelEventArgs e)
@@ -567,18 +582,25 @@ namespace RubikTimer
                     return;
                 }
             }
-
-            try
-            {
-                statsmanager.SaveCurrentFile();
-            }
-
-            catch (Exception ex)
-            {
-                MessageBox.Show("Saving the current Statistic file failed due to the following exception: " + ex.Message, "Statistic file save error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
+            SaveStats(true);
             SaveConfig();
+        }
+
+        private void SaveStats(bool showmessage)
+        {
+            if (!DontSaveStats)
+            {
+                try
+                {
+                    statsmanager.SaveCurrentFile();
+                    newstats = 0;
+                }
+
+                catch (Exception ex)
+                {
+                    if (showmessage) MessageBox.Show("DATA LOSS WARNING:\nAttempt to save the statistic file failed due to the following exception: " + ex.Message, "Statistic file save error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void SaveConfig()

@@ -17,6 +17,7 @@ namespace RubikTimer
     {
         public static string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Rubikfiles");
         public static string filepath = Path.Combine(path, "config.txt");
+        private MainWindow main;
 
         public static string[] configitems =
         {
@@ -108,7 +109,7 @@ namespace RubikTimer
                 }
             }
 
-            Window main = new MainWindow(docountdown, countdownsecs, docounting, autoscramblegenerate, scramblesteps, puzzletype, dontsave, userfolderpath, currentfilename);
+            main = new MainWindow(docountdown, countdownsecs, docounting, autoscramblegenerate, scramblesteps, puzzletype, dontsave, userfolderpath, currentfilename);
             main.Show();
         }
     }
