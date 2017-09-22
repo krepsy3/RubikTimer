@@ -14,8 +14,6 @@ namespace RubikTimer
         public event PropertyChangedEventHandler PropertyChanged;
         private void UpdateProperty(string propertyname) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname)); }
 
-        private FileSystemWatcher filesyswatcher;
-
         #region properties
         private string _dirpath;
         public string DirPath { get { return _dirpath; } private set { _dirpath = value; UpdateProperty("DirPath"); } }
@@ -181,10 +179,6 @@ namespace RubikTimer
 
         public StatsManager(string dirpath, string currentfilename, bool dontsavestats)
         {
-            filesyswatcher = new FileSystemWatcher();
-            filesyswatcher.EnableRaisingEvents = true;
-            filesyswatcher.IncludeSubdirectories = false;
-            filesyswatcher.NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName;
             DirPath = dirpath;
             CurrentFileName = currentfilename;
 
@@ -203,12 +197,6 @@ namespace RubikTimer
         public void AddStatistic(Statistic statistic) { Stats.Add(statistic); UpdateStats(); }
         public void RemoveLastStatistic() { if (Stats.Count > 0) Stats.RemoveAt(Stats.Count - 1); UpdateStats(); }
 
-        private void UpdateFSWatcher()
-        {
-            filesyswatcher.Path = DirPath;
-            filesyswatcher.Filter = CurrentFileName + extension;
-        }
-
         private bool LoadCurrentFile()
         {
             bool result = true;
@@ -219,8 +207,6 @@ namespace RubikTimer
             {
                 if (File.Exists(CurrentFile))
                 {
-                    UpdateFSWatcher();
-
                     string[] temp = File.ReadAllLines(CurrentFile);
                     foreach (string s in temp)
                     {
