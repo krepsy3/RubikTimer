@@ -35,7 +35,7 @@ namespace RubikTimer
 
         public static bool operator ==(Statistic s1, Statistic s2)
         {
-            if (s1 == null || s2 == null) return false;
+            if ((object)s1 == null || (object)s2 == null) return false;
             return s1.Info == s2.Info && s1.SolveTime.Ticks == s2.SolveTime.Ticks;
         }
         public static bool operator !=(Statistic s1, Statistic s2) { return !(s1 == s2); }
