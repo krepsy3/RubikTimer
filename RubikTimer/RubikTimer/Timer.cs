@@ -27,7 +27,7 @@ namespace RubikTimer
 
         public Timer()
         {
-            timer = new DispatcherTimer();
+            timer = new DispatcherTimer(DispatcherPriority.Send);
             timer.Interval = new TimeSpan(500);
             timer.Tick += Tick;
             Timeproperty = new TimeSpan(0);

@@ -16,7 +16,7 @@ namespace RubikTimer
 {
     public partial class HelpWindow : Window
     {
-        public HelpWindow()
+        public HelpWindow(string rootpath)
         {
             InitializeComponent();
         }

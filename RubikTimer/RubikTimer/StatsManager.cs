@@ -104,6 +104,7 @@ namespace RubikTimer
                         temp.ForEach((s) => { a += s.SolveTime.Ticks; });
                         AvgLastTen = ((AvgLastTen.Subtract(AvgLastTen)).Add(new TimeSpan(a / 10)));
                         if (AvgBestTen.Ticks == 0 || AvgBestTen > AvgLastFive) AvgBestTen = ((AvgBestTen.Subtract(AvgBestTen)).Add(AvgLastTen));
+                        temp.Clear();
                         a = 0;
 
                         if (Stats.Count >= 12)
@@ -233,7 +234,7 @@ namespace RubikTimer
 
         public void SaveCurrentFile()
         {
-            if (File.Exists(CurrentFile))
+            if (File.Exists(CurrentFile) && StatFileLoaded)
             {
                 string[] lines = File.ReadAllLines(CurrentFile);
                 List<string> newlines = new List<string>();
@@ -288,11 +289,18 @@ namespace RubikTimer
 
         public void ChangeCurrentFile(string filename)
         {
+            load:
             if (filename != CurrentFileName)
             {
-                if (StatFileLoaded) SaveCurrentFile();
+                try { SaveCurrentFile(); } catch (Exception ex) { throw ex; }
                 CurrentFileName = filename;
-                StatFileLoaded = LoadCurrentFile();
+                try { StatFileLoaded = LoadCurrentFile(); } catch (Exception ex) { throw ex; }
+            }
+            
+            else if (!StatFileLoaded)
+            {
+                CurrentFileName = "";
+                goto load;
             }
         }
 
@@ -310,7 +318,7 @@ namespace RubikTimer
 
         public void ChangeUserDirectory(string newpath)
         {
-            SaveCurrentFile();
+            try { SaveCurrentFile(); } catch (Exception ex) { throw ex; }
 
             foreach(string file in Directory.GetFiles(DirPath,"*",SearchOption.TopDirectoryOnly))
             {
@@ -324,7 +332,11 @@ namespace RubikTimer
 
             DirPath = newpath;
 
-            LoadCurrentFile();
+            try
+            {
+                StatFileLoaded = LoadCurrentFile();
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public List<string> GetStatisticFiles(bool getfullpath)

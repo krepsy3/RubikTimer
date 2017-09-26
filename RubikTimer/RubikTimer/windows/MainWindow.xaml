@@ -9,8 +9,9 @@
         KeyDown="KeyPress" KeyUp="KeyRelease" MouseDown="MouseClick" SizeChanged="MainSize" Closing="ClosingWindow" ContentRendered="WinContRendered" >
 
     <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.New" CanExecute="CanCmdOnStartFile" Executed="CreateFile" />
-        <CommandBinding Command="ApplicationCommands.Open" CanExecute="CanCmdOnStartFile" Executed="OpenFile" />
+        <CommandBinding Command="ApplicationCommands.New" CanExecute="CanCmdFile" Executed="CreateFile" />
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="CanCmdFile" Executed="OpenFile" />
+        <CommandBinding Command="ApplicationCommands.Save" CanExecute="CanCmdFile" Executed="SaveFile" />
         <CommandBinding Command="ApplicationCommands.Replace" CanExecute="CanCmdOnStart" Executed="ChangeFolder" />
         <CommandBinding Command="ApplicationCommands.Find" CanExecute="CanCmdTrue" Executed="OpenFolder" />
         <CommandBinding Command="local:CustomCommands.Edit" CanExecute="CanCmdTrue" Executed="EditStats" />
@@ -26,6 +27,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="Create new statistic file" Command="ApplicationCommands.New" />
                 <MenuItem Header="Select another statistic file" Command="ApplicationCommands.Open" />
+                <MenuItem Header="Save the current statistic file" Command="ApplicationCommands.Save" />                
                 <MenuItem Header="Change User data Folder" Command="ApplicationCommands.Replace" />
                 <MenuItem Header="Open the User data Folder" Command="ApplicationCommands.Find" />
                 <MenuItem Header="Edit statistic file" Command="local:CustomCommands.Edit" />
@@ -163,20 +165,20 @@
                         <TextBlock Text="{Binding Path='AvgBestFive', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" >
-                        <TextBlock Text="Avg of last 10:" />
-                        <TextBlock Text="{Binding Path='AvgLastTen', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" >
-                        <TextBlock Text="Best Avg of 10:" />
-                        <TextBlock Text="{Binding Path='AvgBestTen', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" >
                         <TextBlock Text="Avg of last 3of5:" />
                         <TextBlock Text="{Binding Path='AvgLastThreeFive', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1" >
+                    <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" >
                         <TextBlock Text="Best Avg of 3of5:" />
                         <TextBlock Text="{Binding Path='AvgBestThreeFive', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" >
+                        <TextBlock Text="Avg of last 10:" />
+                        <TextBlock Text="{Binding Path='AvgLastTen', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1" >
+                        <TextBlock Text="Best Avg of 10:" />
+                        <TextBlock Text="{Binding Path='AvgBestTen', StringFormat='{}{0:h\\:m\\:s\\.fff}'}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" >
                         <TextBlock Text="Avg of last 10of12:" />

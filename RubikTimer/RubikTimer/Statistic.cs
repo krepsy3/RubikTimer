@@ -35,6 +35,7 @@ namespace RubikTimer
 
         public static bool operator ==(Statistic s1, Statistic s2)
         {
+            if ((object)s1 == null && (object)s2 == null) return true;
             if ((object)s1 == null || (object)s2 == null) return false;
             return s1.Info == s2.Info && s1.SolveTime.Ticks == s2.SolveTime.Ticks;
         }
@@ -50,6 +51,6 @@ namespace RubikTimer
         }
 
         public override int GetHashCode() { return SolveTime.GetHashCode() ^ Info.GetHashCode(); }
-        public override string ToString() { return "Solved in " + SolveTime.ToString(@"h\:m\:s\.fff") + " - " + Info; }
+        public override string ToString() { return "Solved in " + SolveTime.ToString(@"h\:m\:s\.fff") + ((Info == "") ? "" : " - ") + Info; }
     }
 }

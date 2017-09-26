@@ -14,9 +14,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Diagnostics;
+using System.Media;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using WFDialogResult = System.Windows.Forms.DialogResult;
-using System.Diagnostics;
 
 namespace RubikTimer
 {
@@ -30,9 +31,11 @@ namespace RubikTimer
         private Timer timer;
         private StatsManager statsmanager;
         private ScrambleGenerator gen;
+        private SoundPlayer player;
 
         private bool skipquitconfirmation;
         private int newstats;
+        private bool[] soundplay;
 
         #region Properties
         private SolvePhase _phase;
@@ -59,7 +62,10 @@ namespace RubikTimer
             SolveTime = new DateTime(0);
             gen = new ScrambleGenerator();
             statsmanager = new StatsManager(userpath, currentfile, dontsavestats);
+            player = new SoundPlayer();
             skipquitconfirmation = false;
+            newstats = 0;
+            soundplay = new bool[] { false, false, false, false, false };
             InitializeComponent();
 
             TimeBorder.DataContext = timer;
@@ -92,8 +98,6 @@ namespace RubikTimer
                 m.IsCheckable = true;
                 PuzzleSelectMenuItem.Items.Add(m);
             }
-
-            MediaCommands.Select.Execute(null, null);
         }
 
         private void WinContRendered(object sender, EventArgs e)
@@ -172,6 +176,7 @@ namespace RubikTimer
                 }
             }
 
+            MediaCommands.Select.Execute(null, null);
             if (AutoScramble) CustomCommands.Generate.Execute(null, null);
         }
 
@@ -259,22 +264,6 @@ namespace RubikTimer
             }
         }
 
-        private void TimerPropertyUpdate(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Time")
-            {
-                if (Phase == SolvePhase.Inspection)
-                {
-                    if (timer.Timeproperty.Ticks == 0)
-                    {
-                        Phase = SolvePhase.Solve;
-                        timer.ResetTime();
-                        timer.StartTime(0);
-                    }
-                }
-            }
-        }
-
         private void MouseClick(object sender, MouseButtonEventArgs e) { if (e.ChangedButton == MouseButton.Left) { Keyboard.ClearFocus(); FocusManager.SetFocusedElement(this, this); Focus(); } }
 
         private void UpdatePhase(object sender, PropertyChangedEventArgs e)
@@ -298,6 +287,11 @@ namespace RubikTimer
                             InspectionBorder.BorderThickness = new Thickness(1);
                             TimerBorder.BorderThickness = new Thickness(0);
                             SolvedBorder.BorderThickness = new Thickness(0);
+                            if (InspectionSeconds > 8) { for (int i = 0; i < soundplay.Length; i++) soundplay[i] = false; }
+                            else if (InspectionSeconds > 3) { soundplay[0] = true; for (int i = 1; i < soundplay.Length; i++) soundplay[i] = false; }
+                            else { for (int i = 0; i < soundplay.Length; i++) soundplay[i] = true; }
+                            player.SoundLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/sound", (!soundplay[0]) ? "eightsecs.wav" : "countdown.wav");
+                            try { player.LoadAsync(); } catch { }
                             break;
                         }
                     case SolvePhase.Solve:
@@ -328,6 +322,65 @@ namespace RubikTimer
                             }
                             break;
                         }
+                }
+            }
+        }
+
+        private void TimerPropertyUpdate(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Time")
+            {
+                if (Phase == SolvePhase.Inspection)
+                {
+                    if (timer.Timeproperty.TotalMilliseconds <= 8200 && !soundplay[0])
+                    {
+                        soundplay[0] = true;
+                        try { player.Play(); } catch { }
+                        player.SoundLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/sound/countdown.wav");
+                        try { player.LoadAsync(); } catch { }
+                    }
+
+                    else if (timer.Timeproperty.TotalMilliseconds <= 3200 && !soundplay[1])
+                    {
+                        soundplay[1] = true;
+                        try { player.Play(); } catch { }
+                    }
+
+                    else if (timer.Timeproperty.TotalMilliseconds <= 2200 && !soundplay[2])
+                    {
+                        soundplay[2] = true;
+                        try { player.Play(); } catch { }
+                    }
+
+                    else if (timer.Timeproperty.TotalMilliseconds <= 1200 && !soundplay[3])
+                    {
+                        soundplay[3] = true;
+                        try { player.Play(); } catch { }
+                        player.SoundLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/sound/countstop.wav");
+                        try { player.LoadAsync(); } catch { }
+                    }
+
+                    else if (timer.Timeproperty.TotalMilliseconds <= 200 && !soundplay[4])
+                    {
+                        soundplay[4] = true;
+                        try { player.Play(); } catch { }
+                    }
+
+                    else if (timer.Timeproperty.Ticks == 0)
+                    {
+                        if ((bool)SolveCheckBox.IsChecked)
+                        {
+                            Phase = SolvePhase.Solve;
+                            timer.ResetTime();
+                            timer.StartTime(0);
+                        }
+
+                        if (!soundplay[4])
+                        {
+                            soundplay[4] = true;
+                            try { player.Play(); } catch { }
+                        }
+                    }
                 }
             }
         }
@@ -398,7 +451,7 @@ namespace RubikTimer
         private void CanCmdTrue(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
         private void CanCmdNoSolve(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.Scramble || Phase == SolvePhase.End); }
         private void CanCmdOnStart(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = Phase == SolvePhase.Scramble; }
-        private void CanCmdOnStartFile(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.Scramble && !DontSaveStats); }
+        private void CanCmdFile(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = (Phase == SolvePhase.Scramble && !DontSaveStats); }
 
         private void SelectPuzzle(object sender, ExecutedRoutedEventArgs e)
         {
@@ -500,6 +553,11 @@ namespace RubikTimer
             else MessageBox.Show("There is no Statistic file to be changed to, please select Create new statistic file (Ctrl + N) to create one.", "No Statistic file to swap to", MessageBoxButton.OK, MessageBoxImage.Warning);
 
             UpdateInfo();
+        }
+
+        private void SaveFile(object sender, ExecutedRoutedEventArgs e)
+        {
+            SaveStats(true);
         }
 
         private void ChangeFolder(object sender, ExecutedRoutedEventArgs e)
