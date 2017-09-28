@@ -182,6 +182,7 @@ namespace RubikTimer
         {
             DirPath = dirpath;
             CurrentFileName = currentfilename;
+            Stats = new ObservableCollection<Statistic>();
 
             if (!dontsavestats)
             {
@@ -201,7 +202,7 @@ namespace RubikTimer
         private bool LoadCurrentFile()
         {
             bool result = true;
-            Stats = new ObservableCollection<Statistic>();
+            Stats.Clear();
             ResetStats();
 
             if (Directory.Exists(DirPath))
@@ -368,6 +369,9 @@ namespace RubikTimer
                 Process editor = new Process();
                 editor.StartInfo = new ProcessStartInfo(editorname, Path.Combine(DirPath, filename + extension) + " TIMER");
                 editor.Start();
+                StatFileLoaded = false;
+                Stats.Clear();
+                UpdateStats();
             }
             else result = false;
 

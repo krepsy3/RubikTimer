@@ -9,8 +9,11 @@
         Height="450" MinHeight="450" Width="800" MinWidth="800" Icon="resources/editor.ico" ContentRendered="ContRendered" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.Save" Executed="Save"/>
-        <CommandBinding Command="rt:CustomCommands.SaveAs" Executed="SaveAs"/> 
+        <CommandBinding Command="ApplicationCommands.Save" CanExecute="CanExecute" Executed="Save" />
+        <CommandBinding Command="rt:CustomCommands.SaveAs" CanExecute="CanExecute" Executed="SaveAs" />
+        <CommandBinding Command="rt:CustomCommands.Exit" CanExecute="CanExecute" Executed="Exit" />
+        <CommandBinding Command="ApplicationCommands.Help" CanExecute="CanExecute" Executed="DisplayHelp" />
+        <CommandBinding Command="rt:CustomCommands.About" CanExecute="CanExecute" Executed="DisplayAbout" />
     </Window.CommandBindings>
     
     <Window.Resources>
@@ -75,13 +78,13 @@
     <DockPanel>
         <Menu Padding="10,0" DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Save" Command="ApplicationCommands.Save"/>
-                <MenuItem Header="Save As" Command="rt:CustomCommands.SaveAs"/> 
-                <MenuItem Header="Exit" Click="Exit"/>
+                <MenuItem Header="Save" Command="ApplicationCommands.Save" />
+                <MenuItem Header="Save As" Command="rt:CustomCommands.SaveAs" />
+                <MenuItem Header="Exit" Command="rt:CustomCommands.Exit" />
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="Help"/>
-                <MenuItem Header="About"/>
+                <MenuItem Header="Help" Command="ApplicationCommands.Help" />
+                <MenuItem Header="About" Command="rt:CustomCommands.About" />
             </MenuItem>
         </Menu>
         <ScrollViewer VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" >

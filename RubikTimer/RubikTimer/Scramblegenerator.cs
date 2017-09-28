@@ -16,7 +16,7 @@ namespace RubikTimer
             random = new Random();
         }
 
-        public string Generate(byte type, byte length)
+        public string Generate(byte type, byte lenght)
         {
             switch (type)
             {
@@ -26,21 +26,23 @@ namespace RubikTimer
 
                 case 1:
                 case 2:
-                    return CubeI(length);
+                    return CubeI(lenght);
 
                 case 3:
                 case 4:
-                    return CubeII(length);
+                    return CubeII(lenght);
 
                 case 7:
-                    return SquareOne(length);
+                    return SquareOne(lenght);
 
                 case 8:
-                    return Pyraminx(length);
+                    return Pyraminx(lenght);
+                case 9:
+                    return Megaminx(lenght);
             }
         }
 
-        private string CubeI(byte length)
+        private string CubeI(byte lenght)
         {
             string[] moves = {
                 "R", "R'", "R2",
@@ -51,10 +53,10 @@ namespace RubikTimer
                 "B", "B'", "B2" };
             string result = "";
 
-            int lastgroup = 0;
-            int group = 0;
+            int lastgroup = -1;
+            int group = -1;
 
-            for (byte b = 0; b < length; b++)
+            for (byte b = 0; b < lenght; b++)
             {
                 while (group == lastgroup) group = random.Next(0, 6);
                 result += moves[((group * 3) + random.Next(0, 3))];
@@ -65,7 +67,7 @@ namespace RubikTimer
             return result;
         }
 
-        private string CubeII(byte length)
+        private string CubeII(byte lenght)
         {
             string[] moves = {
                 "R", "R'", "R2", "r", "r'","r2", "Rr", "Rr'", "Rr2",
@@ -76,10 +78,10 @@ namespace RubikTimer
                 "B", "B'", "B2", "b", "b'","r2", "Bb", "Bb'", "Bb2" };
             string result = "";
 
-            int lastgroup = 0;
-            int group = 0;
+            int lastgroup = -1;
+            int group = -1;
 
-            for (byte b = 0; b < length; b++)
+            for (byte b = 0; b < lenght; b++)
             {
                 while (group == lastgroup) group = random.Next(0, 6);
                 result += moves[((group * 9) + random.Next(0, 9))];
@@ -90,15 +92,15 @@ namespace RubikTimer
             return result;
         }
 
-        private string Pyraminx(byte length)
+        private string Pyraminx(byte lenght)
         {
-        string[] moves = { "R", "R'", "L", "L'", "F", "F'", "B", "B'" };
-        string result = "";
+            string[] moves = { "R", "R'", "L", "L'", "F", "F'", "B", "B'" };
+            string result = "";
 
-            int lastgroup = 0;
-            int group = 0;
+            int lastgroup = -1;
+            int group = -1;
 
-            for (byte b = 0; b < length; b++)
+            for (byte b = 0; b < lenght; b++)
             {
                 while (group == lastgroup) group = random.Next(0, 4);
                 result += moves[((group * 2) + random.Next(0, 1))];
@@ -108,7 +110,7 @@ namespace RubikTimer
 
             result.Remove(result.Length - 1);
 
-            foreach(char c in new char[] { 'r', 'l', 'f', 'b'})
+            foreach (char c in new char[] { 'r', 'l', 'f', 'b' })
             {
                 byte b = (byte)random.Next(0, 4);
                 result += b > 1 ? (" " + c.ToString()) : "";
@@ -118,6 +120,28 @@ namespace RubikTimer
             return result;
         }
 
+        private string Megaminx(byte lenght)
+        {
+            string[] moves = { "U", "D", "R", "L" };
+            string result = "";
+
+            int lastmove = -1;
+            int move = -1;
+
+            for (byte b = 0; b < lenght; b++)
+            {
+                while (move == lastmove) move = random.Next(0, 4);
+                result += moves[move];
+                lastmove = move;
+                int i = random.Next(0, 5) - 2;
+                if (i < 0) for (int j = 0; j > i; j--) result += "-";
+                else for (int j = 0; j < i; j++) result += "+";
+                result += " ";
+            }
+
+            return result;
+        }
+        
         private string SquareOne(byte lenght)
         {
             string result = "";

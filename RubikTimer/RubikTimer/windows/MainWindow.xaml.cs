@@ -34,7 +34,6 @@ namespace RubikTimer
         private SoundPlayer player;
 
         private bool skipquitconfirmation;
-        private int newstats;
         private bool[] soundplay;
 
         #region Properties
@@ -64,7 +63,6 @@ namespace RubikTimer
             statsmanager = new StatsManager(userpath, currentfile, dontsavestats);
             player = new SoundPlayer();
             skipquitconfirmation = false;
-            newstats = 0;
             soundplay = new bool[] { false, false, false, false, false };
             InitializeComponent();
 
@@ -76,6 +74,7 @@ namespace RubikTimer
 
             PropertyChanged += UpdatePhase;
             timer.PropertyChanged += TimerPropertyUpdate;
+            statsmanager.PropertyChanged += StatsManagerPropertyUpdate;
 
             InspectionCheckBox.IsChecked = countdown;
             SolveCheckBox.IsChecked = count;
@@ -278,6 +277,10 @@ namespace RubikTimer
                             InspectionBorder.BorderThickness = new Thickness(0);
                             TimerBorder.BorderThickness = new Thickness(0);
                             SolvedBorder.BorderThickness = new Thickness(0);
+                            InspectionCheckBox.IsEnabled = true;
+                            inspectionSecondsTextBox.IsEnabled = true;
+                            SolveCheckBox.IsEnabled = true;
+
                             if (AutoScramble) CustomCommands.Generate.Execute(null, null);
                             break;
                         }
@@ -287,6 +290,10 @@ namespace RubikTimer
                             InspectionBorder.BorderThickness = new Thickness(1);
                             TimerBorder.BorderThickness = new Thickness(0);
                             SolvedBorder.BorderThickness = new Thickness(0);
+                            InspectionCheckBox.IsEnabled = false;
+                            inspectionSecondsTextBox.IsEnabled = false;
+                            SolveCheckBox.IsEnabled = false;
+
                             if (InspectionSeconds > 8) { for (int i = 0; i < soundplay.Length; i++) soundplay[i] = false; }
                             else if (InspectionSeconds > 3) { soundplay[0] = true; for (int i = 1; i < soundplay.Length; i++) soundplay[i] = false; }
                             else { for (int i = 0; i < soundplay.Length; i++) soundplay[i] = true; }
@@ -300,6 +307,9 @@ namespace RubikTimer
                             InspectionBorder.BorderThickness = new Thickness(0);
                             TimerBorder.BorderThickness = new Thickness(1);
                             SolvedBorder.BorderThickness = new Thickness(0);
+                            InspectionCheckBox.IsEnabled = false;
+                            inspectionSecondsTextBox.IsEnabled = false;
+                            SolveCheckBox.IsEnabled = false;
                             break;
                         }
                     case SolvePhase.End:
@@ -308,18 +318,15 @@ namespace RubikTimer
                             InspectionBorder.BorderThickness = new Thickness(0);
                             TimerBorder.BorderThickness = new Thickness(0);
                             SolvedBorder.BorderThickness = new Thickness(1);
+                            InspectionCheckBox.IsEnabled = true;
+                            inspectionSecondsTextBox.IsEnabled = true;
+                            SolveCheckBox.IsEnabled = true;
 
                             statsmanager.AddStatistic(new Statistic(
                                 timer.Timeproperty,
                                 "Date: " + DateTime.Now.ToString(@"d\.M\.yyyy") +
                                 " Puzzle: " + ScrambleGenerator.Type[Type] +
                                 ((AutoScramble && Scramble.Length > 0) ? (" Scramble: " + Scramble) : "")));
-                            newstats++;
-
-                            if (newstats >= 20)
-                            {
-                                SaveStats(false);
-                            }
                             break;
                         }
                 }
@@ -383,6 +390,11 @@ namespace RubikTimer
                     }
                 }
             }
+        }
+
+        private void StatsManagerPropertyUpdate(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "StatFileLoaded") UpdateInfo();
         }
 
         private void UpdateDontSave(object sender, RoutedEventArgs e)
@@ -462,6 +474,7 @@ namespace RubikTimer
                 {
                     ((MenuItem)PuzzleSelectMenuItem.Items[Type]).IsChecked = false;
                     Type = byte.Parse((PuzzleSelectMenuItem.Items.IndexOf(m)).ToString());
+                    CustomCommands.Generate.Execute(null, null);
                     ischecked = true;
                 }
 
@@ -610,10 +623,24 @@ namespace RubikTimer
         }
         
         private void OpenFolder(object sender, ExecutedRoutedEventArgs e) { Process.Start(statsmanager.DirPath); }
-        
-        private void DisplayHelp(object sender, ExecutedRoutedEventArgs e) { }
-        
-        private void DisplayAbout(object sender, ExecutedRoutedEventArgs e) { }
+
+        private void DisplayHelp(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/timerhelp")).Show();
+            }
+            catch { }
+        }
+
+        private void DisplayAbout(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/timerhelp")).Show();
+            }
+            catch { }
+        }
 
         private void Exit(object sender, ExecutedRoutedEventArgs e) { Close(); }
 
@@ -651,7 +678,6 @@ namespace RubikTimer
                 try
                 {
                     statsmanager.SaveCurrentFile();
-                    newstats = 0;
                 }
 
                 catch (Exception ex)

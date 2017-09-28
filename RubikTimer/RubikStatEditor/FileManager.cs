@@ -14,16 +14,16 @@ namespace RubikStatEditor
     class FileManager
     {
         private string filePath;
+        private string dirPath;
         private string extension = ".stxt";
 
         public List<FileItem> LoadFileItemsFromFile(string path)
         {
             filePath = path.Replace(extension, "");
+            dirPath = (new FileInfo(path)).DirectoryName;
 
             List<FileItem> fileItems = new List<FileItem>();
-
             string[] lines = File.ReadAllLines(path);
-
             foreach (string line in lines)
             {
                 Statistic statistic = null;
@@ -57,9 +57,9 @@ namespace RubikStatEditor
             Save(fileItems, filePath);
         }
 
-        public void SaveFileItemsToFile(List<FileItem> fileItems, string path)
+        public void SaveFileItemsToFile(List<FileItem> fileItems, string filename)
         {
-            Save(fileItems, path);
+            Save(fileItems, Path.Combine(dirPath, filename));
         }
 
         private void Save(List<FileItem> fileItems, string path)
@@ -89,6 +89,22 @@ namespace RubikStatEditor
             }
 
             File.WriteAllLines(path + extension, lines);
+        }
+
+        public List<string> GetStatisticFiles()
+        {
+            List<string> result = new List<string>();
+
+            string[] files = Directory.GetFiles(dirPath, "*" + extension, SearchOption.TopDirectoryOnly);
+            foreach (string file in files)
+            {
+                string cleanfile = file;
+                cleanfile = (new FileInfo(file)).Name;
+                cleanfile = cleanfile.Remove(cleanfile.Length - extension.Length);
+                result.Add(cleanfile);
+            }
+
+            return result;
         }
     }
 }

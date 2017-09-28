@@ -30,8 +30,8 @@
                 <MenuItem Header="Save the current statistic file" Command="ApplicationCommands.Save" />                
                 <MenuItem Header="Change User data Folder" Command="ApplicationCommands.Replace" />
                 <MenuItem Header="Open the User data Folder" Command="ApplicationCommands.Find" />
-                <MenuItem Header="Edit statistic file" Command="local:CustomCommands.Edit" />
                 <MenuItem Header="Don't save statistics to file" IsCheckable="True" Name="dontSaveMenuItem" Click="UpdateDontSave" />
+                <MenuItem Header="Edit statistic file" Command="local:CustomCommands.Edit" />
                 <MenuItem Header="Exit" Command="local:CustomCommands.Exit" />
             </MenuItem>
 
@@ -92,7 +92,7 @@
                     <Border x:Name="InspectionBorder" Style="{StaticResource PhaseBorder}" BorderThickness="0" Grid.Row="1">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Inspection time:" Margin="5,5,0,5" />
-                            <TextBox Margin="2,5" MinWidth="25" Text="{Binding Path=InspectionSeconds, Mode=TwoWay}" TextChanged="ByteTextBoxCheck" ToolTip="Set maximal inspection time lenght" />
+                            <TextBox Margin="2,5" MinWidth="25" Text="{Binding Path=InspectionSeconds, Mode=TwoWay}" Name="inspectionSecondsTextBox" TextChanged="ByteTextBoxCheck" ToolTip="Set maximal inspection time lenght" />
                             <TextBlock Text="seconds" Margin="0,5,5,5" />
                             <CheckBox x:Name="InspectionCheckBox" Focusable="False" Margin="30,5" ToolTip="If unchecked, program won't countdown inspection time." Unchecked="PhaseSelect" />
                         </StackPanel>

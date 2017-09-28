@@ -14,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 using Microsoft.Win32;
 using RubikTimer;
@@ -105,13 +104,6 @@ namespace RubikStatEditor
             e.Handled = true;
         }
 
-        #region File Menu
-        private void Exit(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-        #endregion
-
         private void Window_Closing(object sender, CancelEventArgs e)
         {
 
@@ -137,13 +129,33 @@ namespace RubikStatEditor
 
         private void SaveAs(object sender, ExecutedRoutedEventArgs e)
         {
-            FileNameDialog dialog = new FileNameDialog("", "Save As", "Enter name of the file");
+            FileNameDialog dialog = new FileNameDialog("", "Save As", "Please enter the name for the new file:");
 
             if (dialog.ShowDialog() == true)
             {
-                fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"RubikTimer\" + dialog.FileName));
+                fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"RubikTimer\" + dialog.FileName));
                 saved = true;
             }
+        }
+
+        private void Exit(object sender, ExecutedRoutedEventArgs e) { Close(); }
+
+        private void DisplayHelp(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/editorhelp")).Show();
+            }
+            catch { }
+        }
+
+        private void DisplayAbout(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/editorabout")).Show();
+            }
+            catch { }
         }
         #endregion
     }

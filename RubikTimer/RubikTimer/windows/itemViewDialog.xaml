@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RubikTimer"
         mc:Ignorable="d"
-        Title="Solve time statistics View" MinHeight="150" MinWidth="350" Width="350" Height="500" WindowStyle="ToolWindow" Icon="/./resources/main.ico"
+        Title="Solve time Statistic items View" MinHeight="150" MinWidth="350" Width="350" Height="500" WindowStyle="ToolWindow" Icon="/./resources/main.ico"
         SizeChanged="SizeChange" Closing="WinClosing">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Delete" CanExecute="CanDelete" Executed="Delete" />
