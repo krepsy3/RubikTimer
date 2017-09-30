@@ -176,7 +176,7 @@ namespace RubikTimer
             }
 
             MediaCommands.Select.Execute(null, null);
-            if (AutoScramble) CustomCommands.Generate.Execute(null, null);
+            CustomCommands.Generate.Execute(null, null);
         }
 
         private void KeyPress(object sender, KeyEventArgs e)
@@ -403,13 +403,15 @@ namespace RubikTimer
             {
                 statsmanager.ChangeCurrentFile("");
                 DontSaveStats = true;
+                UpdateInfo();
             }
 
             else
             {
                 DontSaveStats = false;
-            } 
-            UpdateInfo();
+                UpdateInfo();
+                ApplicationCommands.Open.Execute(null, null);
+            }
         }
 
         private void UpdateInfo()
@@ -451,11 +453,15 @@ namespace RubikTimer
 
         private void MainSize(object sender, SizeChangedEventArgs e) { AdjustMainGrid(); }
         private void ScrambleUpdated(object sender, DataTransferEventArgs e) { AdjustMainGrid(); }
-        private void ScrambleGridSize(object sender, SizeChangedEventArgs e) { if (MainGrid.ActualHeight > Main.ActualHeight) AdjustMainGrid(); }
+        private void ScrambleGridSize(object sender, SizeChangedEventArgs e) { if (MainGrid.ActualHeight > Main.ActualHeight - 80) AdjustMainGrid(); }
 
         private void AdjustMainGrid()
         {
-            if (MainGrid.ActualHeight > Main.ActualHeight) MainGrid.RowDefinitions[3].Height = new GridLength(Main.ActualHeight - MainGrid.RowDefinitions[0].ActualHeight - MainGrid.RowDefinitions[1].ActualHeight - MainGrid.RowDefinitions[2].ActualHeight - 80);
+            if (MainGrid.ActualHeight > Main.ActualHeight - 80)
+            {
+                double diff = Main.ActualHeight - MainGrid.ActualHeight - 80;
+                MainGrid.RowDefinitions[3].Height = new GridLength(MainGrid.RowDefinitions[3].ActualHeight + diff);
+            }
             else MainGrid.RowDefinitions[3].Height = new GridLength();
         }
 
@@ -626,20 +632,16 @@ namespace RubikTimer
 
         private void DisplayHelp(object sender, ExecutedRoutedEventArgs e)
         {
-            try
-            {
-                new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/timerhelp")).Show();
-            }
-            catch { }
+            HelpWindow h = new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/timerhelp"));
+            if (h.ProperlyLoaded) h.Show();
+            else h = null;
         }
 
         private void DisplayAbout(object sender, ExecutedRoutedEventArgs e)
         {
-            try
-            {
-                new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/timerhelp")).Show();
-            }
-            catch { }
+            HelpWindow h = new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/timerabout"));
+            if (h.ProperlyLoaded) h.Show();
+            else h = null;
         }
 
         private void Exit(object sender, ExecutedRoutedEventArgs e) { Close(); }

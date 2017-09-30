@@ -41,7 +41,7 @@ namespace RubikStatEditor
                         comment = (data.Length == 3) ? data[2] : "";
                     }
                     else
-                        comment = line; // it's an invalid line that looks like statistic
+                        comment = line;
                 }
                 else
                     comment = line;
@@ -57,9 +57,11 @@ namespace RubikStatEditor
             Save(fileItems, filePath);
         }
 
-        public void SaveFileItemsToFile(List<FileItem> fileItems, string filename)
+        public bool SaveFileItemsToFile(List<FileItem> fileItems, string filename, bool overwrite)
         {
+            if (!overwrite && File.Exists(Path.Combine(dirPath, filename + extension))) return false;
             Save(fileItems, Path.Combine(dirPath, filename));
+            return true;
         }
 
         private void Save(List<FileItem> fileItems, string path)

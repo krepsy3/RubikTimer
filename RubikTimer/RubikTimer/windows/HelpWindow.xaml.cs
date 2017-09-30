@@ -18,6 +18,8 @@ namespace RubikTimer
 {
     public partial class HelpWindow : Window
     {
+        public bool ProperlyLoaded { get; private set; }
+
         private string root;
         private List<string> ImageSourceNames;
         private List<List<string>> ImageNames;
@@ -26,6 +28,7 @@ namespace RubikTimer
 
         public HelpWindow(string rootpath)
         {
+            ProperlyLoaded = true;
             root = rootpath;
             if (!File.Exists(Path.Combine(rootpath, "text.xml"))) Close();
             ImageSourceNames = new List<string>();
@@ -45,11 +48,14 @@ namespace RubikTimer
                 flwdoc = (FlowDocument)XamlReader.Load(new XmlTextReader(new StringReader(doc)));
                 mainFlowDocViewer.Document = flwdoc;
             }
-            catch { Close(); }
+            catch { ProperlyLoaded = false; }
 
-            AssociateImages();
-            if (Chapters.Count < 2) chapterSelectionWrapPanel.Visibility = Visibility.Collapsed;
-            else chapterSelectComboBox.ItemsSource = Chapters;
+            if (ProperlyLoaded)
+            {
+                AssociateImages();
+                if (Chapters.Count < 2) chapterSelectionWrapPanel.Visibility = Visibility.Collapsed;
+                else chapterSelectComboBox.ItemsSource = Chapters;
+            }
         }
 
         private string LoadXml()

@@ -133,7 +133,7 @@
                             <Setter Property="Margin" Value="0,2,8,3" />
                         </Style>
                     </Grid.Resources>
-                    <TextBlock Text="Time Stats:" Margin="-20,0,0,8" />
+                    <TextBlock Text="{Binding Path='Stats.Count', StringFormat='Statistics: ({0})'}" Margin="-20,0,0,8" />
                     <Button Content="View Statistics" Grid.Column="1" HorizontalAlignment="Left" Padding="10,0" Command="local:CustomCommands.View" Focusable="False" />
 
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" >

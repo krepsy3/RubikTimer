@@ -14,8 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-
-using Microsoft.Win32;
 using RubikTimer;
 
 namespace RubikStatEditor
@@ -123,39 +121,74 @@ namespace RubikStatEditor
 
         private void Save(object sender, ExecutedRoutedEventArgs e)
         {
-            fileManager.SaveFileItems(new List<FileItem>(fileItems));
-            saved = true;
+            try
+            {
+                fileManager.SaveFileItems(new List<FileItem>(fileItems));
+                saved = true;
+                ViewSuccessSave();
+            }
+            catch (Exception ex) { ViewFailSave(ex); }
         }
 
         private void SaveAs(object sender, ExecutedRoutedEventArgs e)
         {
             FileNameDialog dialog = new FileNameDialog("", "Save As", "Please enter the name for the new file:");
+            FileNamePick:
 
-            if (dialog.ShowDialog() == true)
+            if (!((bool)dialog.ShowDialog())) return;
+            else
             {
-                fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"RubikTimer\" + dialog.FileName));
-                saved = true;
+                if (dialog.FileName == "" || dialog.FileName == " " || dialog.FileName == "  ")
+                {
+                    MessageBox.Show("Invalid file name. File name cannot be blank.", "Invalid name picked", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    goto FileNamePick;
+                }
+
+                try
+                {
+                    if (!fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), dialog.FileName, false))
+                    {
+                        switch (MessageBox.Show("There already exists a file called " + dialog.FileName + ". Do you wish to overwrite it?", "File already exists", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.No))
+                        {
+                            case MessageBoxResult.Yes: fileManager.SaveFileItemsToFile(new List<FileItem>(fileItems), dialog.FileName, true); break;
+                            case MessageBoxResult.Cancel: case MessageBoxResult.None: return;
+                            case MessageBoxResult.No:
+                                {
+                                    dialog = new FileNameDialog(dialog.FileName, "Pick another name", "Please pick another name for the new file:");
+                                    goto FileNamePick;
+                                }
+                        }
+                    }
+
+                    saved = true;
+                    fileItems = new ObservableCollection<FileItem>(fileManager.LoadFileItemsFromFile(dialog.FileName));
+                    dataGrid.ItemsSource = null;
+                    dataGrid.ItemsSource = fileItems;
+                    Title = (new FileInfo(dialog.FileName).Name) + " - RubikTimer Satistic files Editor";
+                    ViewSuccessSave();
+                }
+
+                catch (Exception ex) { ViewFailSave(ex); }
             }
         }
+
+        private void ViewSuccessSave() { MessageBox.Show("Statistic file successfully saved.", "File saving successful", MessageBoxButton.OK, MessageBoxImage.Information); }
+        private void ViewFailSave(Exception ex) { MessageBox.Show("Saving the statistic file failed due to the following exception: " + ex.Message, "File saving error", MessageBoxButton.OK, MessageBoxImage.Error); }
 
         private void Exit(object sender, ExecutedRoutedEventArgs e) { Close(); }
 
         private void DisplayHelp(object sender, ExecutedRoutedEventArgs e)
         {
-            try
-            {
-                new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/editorhelp")).Show();
-            }
-            catch { }
+            HelpWindow h = new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/editorhelp"));
+            if (h.ProperlyLoaded) h.Show();
+            else h = null;
         }
 
         private void DisplayAbout(object sender, ExecutedRoutedEventArgs e)
         {
-            try
-            {
-                new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/editorabout")).Show();
-            }
-            catch { }
+            HelpWindow h = new HelpWindow(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources/help/editorabout"));
+            if (h.ProperlyLoaded) h.Show();
+            else h = null;
         }
         #endregion
     }

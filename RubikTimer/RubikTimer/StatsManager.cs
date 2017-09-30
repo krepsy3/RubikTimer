@@ -75,9 +75,13 @@ namespace RubikTimer
                 if (Best.Ticks == 0 || Best > Last.SolveTime) Best = ((Best.Subtract(Best)).Add(Last.SolveTime));
                 if (Worst < Last.SolveTime) Worst = ((Worst.Subtract(Worst)).Add(Last.SolveTime));
                 Average = ((Average.Subtract(Average)).Add(new TimeSpan(((Average.Ticks * (Stats.Count - 1)) + Last.SolveTime.Ticks) / Stats.Count)));
-                Median = ((Median.Subtract(Median)).Add((Stats.Count % 2 == 1) ? (Stats[(Stats.Count - 1) / 2].SolveTime) : (new TimeSpan((((Stats[(Stats.Count / 2) - 1]).SolveTime.Ticks) + ((Stats[Stats.Count / 2]).SolveTime.Ticks)) / 2))));
 
                 List<Statistic> temp = new List<Statistic>();
+                temp.AddRange(Stats);
+                temp = temp.OrderBy(s => s.SolveTime).ToList();
+                Median = ((Median.Subtract(Median)).Add((temp.Count % 2 == 1) ? (temp[(temp.Count - 1) / 2].SolveTime) : (new TimeSpan((((temp[(temp.Count / 2) - 1]).SolveTime.Ticks) + ((temp[temp.Count / 2]).SolveTime.Ticks)) / 2))));
+                temp.Clear();
+
                 Statistic b = null, w = null;
                 long a = 0;
 

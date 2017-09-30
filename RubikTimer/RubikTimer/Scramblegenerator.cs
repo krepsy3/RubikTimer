@@ -31,7 +31,9 @@ namespace RubikTimer
                 case 3:
                 case 4:
                     return CubeII(lenght);
-
+                case 5:
+                case 6:
+                    return CubeIII(lenght);
                 case 7:
                     return SquareOne(lenght);
 
@@ -67,15 +69,16 @@ namespace RubikTimer
             return result;
         }
 
+
         private string CubeII(byte lenght)
         {
             string[] moves = {
-                "R", "R'", "R2", "r", "r'","r2", "Rr", "Rr'", "Rr2",
-                "L", "L'", "L2", "l", "l'","l2", "Ll", "Ll'", "Ll2",
-                "U", "U'", "U2", "u", "u'","u2", "Uu", "Uu'", "Uu2",
-                "D", "D'", "D2", "d", "d'","d2", "Dd", "Dd'", "Dd2",
-                "F", "F'", "F2", "f", "f'","f2", "Ff", "Ff'", "Ff2",
-                "B", "B'", "B2", "b", "b'","r2", "Bb", "Bb'", "Bb2" };
+                "R", "R'", "R2", "Rr", "Rr'", "Rr2",
+                "L", "L'", "L2", "Ll", "Ll'", "Ll2",
+                "U", "U'", "U2", "Uu", "Uu'", "Uu2",
+                "D", "D'", "D2", "Dd", "Dd'", "Dd2",
+                "F", "F'", "F2", "Ff", "Ff'", "Ff2",
+                "B", "B'", "B2", "Bb", "Bb'", "Bb2" };
             string result = "";
 
             int lastgroup = -1;
@@ -84,7 +87,34 @@ namespace RubikTimer
             for (byte b = 0; b < lenght; b++)
             {
                 while (group == lastgroup) group = random.Next(0, 6);
-                result += moves[((group * 9) + random.Next(0, 9))];
+                result += moves[((group * 6) + random.Next(0, 6))];
+                result += " ";
+                lastgroup = group;
+            }
+
+            return result;
+        }
+
+        private string CubeIII(byte lenght)
+        {
+            string[] moves = {
+                "R", "R'", "R2",
+                "L", "L'", "L2",
+                "U", "U'", "U2",
+                "D", "D'", "D2",
+                "F", "F'", "F2",
+                "B", "B'", "B2" };
+            string result = "";
+
+            int lastgroup = -1;
+            int group = -1;
+
+            for (byte b = 0; b < lenght; b++)
+            {
+                while (group == lastgroup) group = random.Next(0, 6);
+                int tier = random.Next(1, 4);
+                result += (tier > 1) ? "T" + tier.ToString() : "";
+                result += moves[((group * 3) + random.Next(0, 3))];
                 result += " ";
                 lastgroup = group;
             }
