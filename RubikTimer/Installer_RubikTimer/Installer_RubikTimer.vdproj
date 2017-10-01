@@ -39,14 +39,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3701053BE6D247F49FEF9564A068815D"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_2B7740180BA702A2920FF8EE354AF41C"
+        "OwnerKey" = "8:_A1DF17820ED34DD9867A0F21E3EBF40C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8737573FDA2999B8B7DC4A4F338C8FA4"
-        "OwnerKey" = "8:_A1DF17820ED34DD9867A0F21E3EBF40C"
+        "MsmKey" = "8:_3701053BE6D247F49FEF9564A068815D"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -64,7 +64,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0271AF2AF03AA2978CD70343DE183E38"
+        "OwnerKey" = "8:_1841E01C509043D497D27A0EC0669DAE"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,13 +76,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8737573FDA2999B8B7DC4A4F338C8FA4"
+        "OwnerKey" = "8:_2B7740180BA702A2920FF8EE354AF41C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1841E01C509043D497D27A0EC0669DAE"
+        "OwnerKey" = "8:_0271AF2AF03AA2978CD70343DE183E38"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -103,6 +103,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -119,6 +127,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -175,7 +199,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -199,34 +223,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3701053BE6D247F49FEF9564A068815D"
-            {
-            "SourcePath" = "8:..\\RubikTimer\\resources\\file.ico"
-            "TargetName" = "8:file.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_F3BF113815764C67AFEE945CCD96E07F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8737573FDA2999B8B7DC4A4F338C8FA4"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2B7740180BA702A2920FF8EE354AF41C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:RubikTimer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8737573FDA2999B8B7DC4A4F338C8FA4"
+                    "_2B7740180BA702A2920FF8EE354AF41C"
                     {
                     "Name" = "8:RubikTimer.exe"
                     "Attributes" = "3:512"
@@ -246,8 +250,28 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3701053BE6D247F49FEF9564A068815D"
+            {
+            "SourcePath" = "8:..\\RubikTimer\\resources\\file.ico"
+            "TargetName" = "8:file.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_F3BF113815764C67AFEE945CCD96E07F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B03EE27666DC49F48541CD38C86E83C4"
@@ -275,8 +299,8 @@
         {
             "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_9F5F4AA77A0E44A3AD268A52CA8BF8F0"
             {
-            "Name" = "8:RubikTimerStat"
-            "Description" = "8:Rubik Timer Stats"
+            "Name" = "8:Rubik Timer Statistic file"
+            "Description" = "8:File for solving times and information about them"
             "Extensions" = "8:stxt"
             "MIME" = "8:"
             "Icon" = "8:_3701053BE6D247F49FEF9564A068815D"
@@ -299,17 +323,6 @@
         }
         "Folder"
         {
-            "{1525181F-901A-416C-8A58-119130FE478E}:_6F37EDEA6BDE4E948C2785677D3FBDB4"
-            {
-            "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Property" = "8:DesktopFolder"
-                "Folders"
-                {
-                }
-            }
             "{1525181F-901A-416C-8A58-119130FE478E}:_B4A76C3D999443DDA551BD59C6F4F4E9"
             {
             "Name" = "8:#1918"
@@ -330,17 +343,6 @@
                         {
                         }
                     }
-                }
-            }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_D3C1D2C3F3D1461781539E17E528255C"
-            {
-            "Name" = "8:#1919"
-            "AlwaysCreate" = "11:FALSE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Property" = "8:ProgramMenuFolder"
-                "Folders"
-                {
                 }
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_F3BF113815764C67AFEE945CCD96E07F"
@@ -370,15 +372,15 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Rubik Timer"
+        "ProductName" = "8:RubikTimer"
         "ProductCode" = "8:{8710C4E0-1DE8-40FB-94C1-2465F01E2517}"
-        "PackageCode" = "8:{AC09DD46-EB51-4D71-9407-30F60BAAC1B1}"
+        "PackageCode" = "8:{6E38D55A-8473-4811-A0B7-9023A3353B87}"
         "UpgradeCode" = "8:{EB90EC35-63AC-45D4-A63B-7EE3D92210ED}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
-        "InstallAllUsers" = "11:FALSE"
+        "InstallAllUsers" = "11:TRUE"
         "ProductVersion" = "8:1.0.0"
         "Manufacturer" = "8:ALO"
         "ARPHELPTELEPHONE" = "8:"
@@ -386,7 +388,7 @@
         "Title" = "8:Rubik Timer"
         "Subject" = "8:"
         "ARPCONTACT" = "8:ALO"
-        "Keywords" = "8:Rubik Timer"
+        "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:_1E6B87AB207B42048DCD8362D2B22746"
@@ -588,8 +590,8 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1202"
+                            "Setting" = "3:2"
+                            "Value" = "8:This is a freeware. Do not pay for it."
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -724,8 +726,8 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1202"
+                            "Setting" = "3:2"
+                            "Value" = "8:This is a freeware. Do not pay for it."
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -907,7 +909,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_1841E01C509043D497D27A0EC0669DAE"
             {
-            "SourcePath" = "8:..\\RubikTimer\\obj\\Debug\\RubikTimer.exe"
+            "SourcePath" = "8:..\\RubikTimer\\obj\\Release\\RubikTimer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F3BF113815764C67AFEE945CCD96E07F"
@@ -935,7 +937,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A1DF17820ED34DD9867A0F21E3EBF40C"
             {
-            "SourcePath" = "8:..\\RubikStatEditor\\obj\\Debug\\RubikStatEditor.exe"
+            "SourcePath" = "8:..\\RubikStatEditor\\obj\\Release\\RubikStatEditor.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F3BF113815764C67AFEE945CCD96E07F"
