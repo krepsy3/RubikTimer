@@ -165,7 +165,7 @@ namespace RubikTimer
         {
             Image[] imgs = mainFlowDocViewer.Document.Blocks.SelectMany(b => FindImages(b)).ToArray();
 
-            for (int i = 0; i < ImageSourceNames.Count; i++)
+            for (int i = 0; i < imgs.ToList().Count; i++)
             {
                 ImageSource src;
                 try { src = new BitmapImage(new Uri(Path.Combine(root, ImageSourceNames[i]))); }
@@ -173,7 +173,9 @@ namespace RubikTimer
 
                 foreach (Image img in imgs)
                 {
-                    foreach (string s in ImageNames[i]) if (img.Name == s) img.Source = src;
+                    try { foreach (string s in ImageNames[i]) if (img.Name == s) img.Source = src; }
+                    catch { }
+
                     try
                     {
                         string tmp = EmbeddedImages[img.Name];
@@ -183,6 +185,7 @@ namespace RubikTimer
                 }
             }
         }
+
         private IEnumerable<Image> FindImages(Block b)
         {
             if (b is Table)
@@ -196,10 +199,21 @@ namespace RubikTimer
 
             else if (b is Paragraph)
             {
-                return ((Paragraph)b).Inlines
+                var result = new List<Image>();
+
+                result.AddRange(((Paragraph)b).Inlines
                     .OfType<InlineUIContainer>()
                     .Where(x => x.Child is Image)
-                    .Select(x => x.Child as Image);
+                    .Select(x => x.Child as Image));
+
+                var i = ((Paragraph)b).Inlines
+                    .OfType<InlineUIContainer>()
+                    .Where(x => x.Child is Panel)
+                    .Select(x => x.Child as Panel);
+
+                foreach (UIElementCollection uec in i.Select(x => x.Children)) foreach (UIElement ue in uec) if (ue is Image) result.Add(ue as Image);
+
+                return result;
             }
 
             else if (b is BlockUIContainer)

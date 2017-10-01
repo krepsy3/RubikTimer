@@ -294,6 +294,13 @@ namespace RubikTimer
 
         public void ChangeCurrentFile(string filename)
         {
+            if (filename == "")
+            {
+                CurrentFileName = "";
+                StatFileLoaded = false;
+                return;
+            }
+
             load:
             if (filename != CurrentFileName)
             {
