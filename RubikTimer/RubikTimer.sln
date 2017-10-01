@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RubikStatEditor", "RubikStatEditor\RubikStatEditor.csproj", "{6FE96836-3BF3-4505-A59D-7D47ADE092A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RubikTimer", "RubikTimer\RubikTimer.csproj", "{B387057F-922B-43CD-BD7F-42105EBE9B2D}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer_RubikTimer", "Installer_RubikTimer\Installer_RubikTimer.vdproj", "{86792C4C-13FE-42EF-A8F2-04F64AA39625}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,8 @@ Global
 		{B387057F-922B-43CD-BD7F-42105EBE9B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B387057F-922B-43CD-BD7F-42105EBE9B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B387057F-922B-43CD-BD7F-42105EBE9B2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86792C4C-13FE-42EF-A8F2-04F64AA39625}.Debug|Any CPU.ActiveCfg = Debug
+		{86792C4C-13FE-42EF-A8F2-04F64AA39625}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
