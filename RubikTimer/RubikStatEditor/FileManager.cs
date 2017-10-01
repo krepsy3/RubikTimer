@@ -80,7 +80,8 @@ namespace RubikStatEditor
                 }
                 else if (item.ItemContent == FileItem.LineContents.TextComment)
                 {
-                    line = item.Comment;
+                    line = item.Info + "_" + item.Comment;
+                    while (line.StartsWith("_")) line = line.Substring(1);
                 }
                 else
                 {
